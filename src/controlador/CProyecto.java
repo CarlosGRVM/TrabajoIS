@@ -59,6 +59,14 @@ public class CProyecto implements ActionListener, DocumentListener {
                 vista.btnDescartar.setEnabled(vista.jTable1.getSelectedRow() != -1);
             }
         });
+        
+        
+        vista.lblRegresar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controlador.GestorVistas.regresar(vista); // ← método universal para volver
+            }
+        });
     }
 
     private void validarCampos() {

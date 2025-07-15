@@ -166,6 +166,8 @@ public class CandidatoControlador implements ActionListener {
             }
         }
     });
+    
+    
 }
 
 

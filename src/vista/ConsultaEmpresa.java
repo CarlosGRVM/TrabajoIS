@@ -26,7 +26,7 @@ public class ConsultaEmpresa extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        lblAtras = new javax.swing.JLabel();
+        lblRegresar = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -43,7 +43,7 @@ public class ConsultaEmpresa extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(0, 32, 96));
 
-        lblAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/flecha-izquierda.png"))); // NOI18N
+        lblRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/flecha-izquierda.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -51,13 +51,13 @@ public class ConsultaEmpresa extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(lblAtras, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                .addComponent(lblRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -179,8 +179,8 @@ public class ConsultaEmpresa extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTable jTable1;
-    public javax.swing.JLabel lblAtras;
     public javax.swing.JLabel lblContador;
+    public javax.swing.JLabel lblRegresar;
     public javax.swing.JTextField txtBuscador;
     // End of variables declaration//GEN-END:variables
 }

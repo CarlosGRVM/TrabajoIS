@@ -295,7 +295,7 @@ public class CEmpresa implements ActionListener, KeyListener, MouseListener, Doc
     private void inicializarListener() {
 
         vista.lblContador.addMouseListener(this);
-        vista.lblAtras.addMouseListener(this);
+        vista.lblRegresar.addMouseListener(this);
 
         vista.btnAnadir.addActionListener(this);
         vista.btnDescartar.addActionListener(this);
@@ -340,6 +340,13 @@ public class CEmpresa implements ActionListener, KeyListener, MouseListener, Doc
             @Override
             public void changedUpdate(DocumentEvent e) {
                 filtrarYOrdenar();
+            }
+        });
+        
+        vista.lblRegresar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controlador.GestorVistas.regresar(vista); // ← método universal para volver
             }
         });
 

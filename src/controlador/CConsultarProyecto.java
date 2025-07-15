@@ -69,6 +69,13 @@ public class CConsultarProyecto {
                 confirmarSalida();
             }
         });
+        
+        vista.lblRegresar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controlador.GestorVistas.regresar(vista); // ← método universal para volver
+            }
+        });
 
         vista.jTable1.getModel().addTableModelListener(e -> hayCambiosSinGuardar = true);
     }

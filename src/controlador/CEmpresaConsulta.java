@@ -64,6 +64,13 @@ public class CEmpresaConsulta {
                 confirmarSalida();
             }
         });
+        
+        vista.lblRegresar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controlador.GestorVistas.regresar(vista); // ← método universal para volver
+            }
+        });
     }
 
     private void confirmarSalida() {

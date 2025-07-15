@@ -34,7 +34,7 @@ public class RegistroCandidato extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
+        lblRegresar = new javax.swing.JButton();
         txtBusqueda = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         etiCandidato = new javax.swing.JLabel();
@@ -71,15 +71,18 @@ public class RegistroCandidato extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Registro Candidato");
 
-        jButton6.setBackground(new java.awt.Color(0, 102, 102));
+        lblRegresar.setBackground(new java.awt.Color(0, 102, 102));
+        lblRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/regresar.png"))); // NOI18N
+        lblRegresar.setContentAreaFilled(false);
+        lblRegresar.setOpaque(true);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addComponent(lblRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(512, 512, 512))
@@ -87,14 +90,10 @@ public class RegistroCandidato extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jButton6)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(lblRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1))
                 .addContainerGap())
         );
 
@@ -107,6 +106,7 @@ public class RegistroCandidato extends javax.swing.JFrame {
         etiCandidato.setText("0/0");
 
         btnOrden.setFont(new java.awt.Font("Garuda", 0, 18)); // NOI18N
+        btnOrden.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/ordenar.png"))); // NOI18N
         btnOrden.setText("Ascendente");
 
         jLabel2.setFont(new java.awt.Font("Garuda", 0, 18)); // NOI18N
@@ -133,8 +133,10 @@ public class RegistroCandidato extends javax.swing.JFrame {
             }
         });
 
+        btnAñadir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/anadir.png"))); // NOI18N
         btnAñadir.setText("Añadir");
 
+        btnDescartar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/basura.png"))); // NOI18N
         btnDescartar.setText("Descartar");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -165,9 +167,9 @@ public class RegistroCandidato extends javax.swing.JFrame {
                 .addContainerGap(49, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(287, 287, 287)
-                .addComponent(btnAñadir)
-                .addGap(175, 175, 175)
-                .addComponent(btnDescartar)
+                .addComponent(btnAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(127, 127, 127)
+                .addComponent(btnDescartar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -202,6 +204,8 @@ public class RegistroCandidato extends javax.swing.JFrame {
                     .addComponent(btnDescartar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(13, 13, 13))
         );
+
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/lupa.png"))); // NOI18N
 
         jLabel9.setFont(new java.awt.Font("Garuda", 0, 18)); // NOI18N
         jLabel9.setText("Buscar por nombre:");
@@ -307,7 +311,6 @@ public class RegistroCandidato extends javax.swing.JFrame {
     public javax.swing.JButton btnDescartar;
     public javax.swing.JButton btnOrden;
     public javax.swing.JLabel etiCandidato;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -321,6 +324,7 @@ public class RegistroCandidato extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton lblRegresar;
     public javax.swing.JTable tblCandidato;
     public javax.swing.JTextField txtApeM;
     public javax.swing.JTextField txtApeP;
