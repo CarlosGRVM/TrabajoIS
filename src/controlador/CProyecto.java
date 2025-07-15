@@ -9,13 +9,11 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 
-public class CProyecto implements ActionListener, DocumentListener, ListSelectionListener {
+public class CProyecto implements ActionListener, DocumentListener {
 
     private final FormatoProyecto vista;
     private final Proyecto modeloProyecto;
     private final Empresa[] empresas;
-    private Proyecto proyectoEnEdicion = null;
-    private boolean hayCambiosSinGuardar = false;
 
     private String campoOrden = "id_proyecto";
     private boolean ordenAscendente = true;
@@ -38,6 +36,9 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
 
         vista.lblEmpresaErr.setVisible(false);
         vista.lblTituloErr.setVisible(false);
+
+        // Evitar selección en la tabla
+        vista.jTable1.setRowSelectionAllowed(true);
     }
 
     private void agregarEventos() {
@@ -52,7 +53,12 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
         vista.txtEmpresa.getDocument().addDocumentListener(this);
         vista.txtBuscar.getDocument().addDocumentListener(this);
 
-        vista.jTable1.getSelectionModel().addListSelectionListener(this);
+        // Activar botón eliminar si hay una fila seleccionada
+        vista.jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                vista.btnDescartar.setEnabled(vista.jTable1.getSelectedRow() != -1);
+            }
+        });
     }
 
     private void validarCampos() {
@@ -74,22 +80,17 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
 
         // Validación empresa
         boolean empresaExiste = false;
-        if (!nombreEmpresa.isEmpty()) {
-            for (Empresa e : empresas) {
-                if (e.getNombre().equalsIgnoreCase(nombreEmpresa)) {
-                    empresaExiste = true;
-                    break;
-                }
+        for (Empresa e : empresas) {
+            if (e.getNombre().equalsIgnoreCase(nombreEmpresa)) {
+                empresaExiste = true;
+                break;
             }
         }
         vista.lblEmpresaErr.setVisible(!nombreEmpresa.isEmpty() && !empresaExiste);
 
-        // Validación título
-        boolean tituloExiste = false;
-        if (!titulo.isEmpty()) {
-            tituloExiste = modeloProyecto.existeTitulo(titulo);
-        }
-        vista.lblTituloErr.setVisible(!titulo.isEmpty() && tituloExiste);
+        // Validación título duplicado
+        boolean tituloExiste = !titulo.isEmpty() && modeloProyecto.existeTitulo(titulo);
+        vista.lblTituloErr.setVisible(tituloExiste);
 
         vista.btnAnadir.setEnabled(camposLlenos && espaciosValidos && empresaExiste && !tituloExiste);
     }
@@ -103,7 +104,6 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
         p.setDisponible("Sí");
         p.setTipo("N/R");
 
-        // Buscar empresa por nombre
         String nombreEmpresa = vista.txtEmpresa.getText().trim();
         for (Empresa e : empresas) {
             if (e.getNombre().equalsIgnoreCase(nombreEmpresa)) {
@@ -123,12 +123,12 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
         for (Proyecto p : lista) {
             String nombreEmpresa = p.getEmpresas()[0] != null ? p.getEmpresas()[0].getNombre() : "N/D";
             modelo.addRow(new Object[]{
-                p.getId_proyecto(),
-                nombreEmpresa,
-                p.getTitulo(),
-                p.getDescripcion(),
-                p.getEspacios(),
-                p.getDisponible()
+                    p.getId_proyecto(),
+                    nombreEmpresa,
+                    p.getTitulo(),
+                    p.getDescripcion(),
+                    p.getEspacios(),
+                    p.getDisponible()
             });
         }
 
@@ -143,34 +143,15 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
             return;
         }
 
-        boolean exito;
-        if (proyectoEnEdicion != null && proyectoEnEdicion.getId_proyecto() == nuevo.getId_proyecto()) {
-            exito = modeloProyecto.actualizarProyecto(nuevo);
-            if (exito) {
-                JOptionPane.showMessageDialog(vista, "Proyecto actualizado");
-            }
-        } else {
-            exito = nuevo.insertarProyecto(nuevo.getEmpresas()[0].getId_empresa());
-            if (exito) {
-                JOptionPane.showMessageDialog(vista, "Proyecto registrado");
-            }
-        }
+        boolean exito = nuevo.insertarProyecto(nuevo.getEmpresas()[0].getId_empresa());
 
         if (exito) {
-            limpiarCampos();
+            JOptionPane.showMessageDialog(vista, "Proyecto registrado correctamente.");
+            limpiarFormulario();
             mostrarProyectos();
-            proyectoEnEdicion = null;
-            hayCambiosSinGuardar = false;
         } else {
-            JOptionPane.showMessageDialog(vista, "Error al guardar proyecto");
+            JOptionPane.showMessageDialog(vista, "Error al registrar proyecto.");
         }
-    }
-
-    private void limpiarCampos() {
-        vista.txtTitulo.setText("");
-        vista.txtDescripcion.setText("");
-        vista.txtEspacios.setText("");
-        vista.txtEmpresa.setText("");
     }
 
     private void eliminarProyectoSeleccionado() {
@@ -188,7 +169,7 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
                 JOptionPane.showMessageDialog(vista, "Proyecto eliminado");
                 mostrarProyectos();
             } else {
-                JOptionPane.showMessageDialog(vista, "Error al eliminar");
+                JOptionPane.showMessageDialog(vista, "Error al eliminar proyecto");
             }
         }
     }
@@ -197,6 +178,14 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
         ordenAscendente = !ordenAscendente;
         vista.btnOrdenar.setText(ordenAscendente ? "Ascendente" : "Descendente");
         mostrarProyectos();
+    }
+    
+    private void limpiarFormulario() {
+        vista.txtEmpresa.setText("");
+        vista.txtTitulo.setText("");
+        vista.txtDescripcion.setText("");
+        vista.txtEspacios.setText("");
+        
     }
 
     private void cambiarFiltro() {
@@ -224,8 +213,8 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
 
         List<Proyecto> filtrados = lista.stream()
                 .filter(p -> p.getTitulo().toLowerCase().contains(texto)
-                || p.getDescripcion().toLowerCase().contains(texto)
-                || (p.getEmpresas()[0] != null && p.getEmpresas()[0].getNombre().toLowerCase().contains(texto)))
+                        || p.getDescripcion().toLowerCase().contains(texto)
+                        || (p.getEmpresas()[0] != null && p.getEmpresas()[0].getNombre().toLowerCase().contains(texto)))
                 .toList();
 
         DefaultTableModel modelo = new DefaultTableModel(
@@ -234,12 +223,12 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
         for (Proyecto p : filtrados) {
             String nombreEmpresa = p.getEmpresas()[0] != null ? p.getEmpresas()[0].getNombre() : "N/D";
             modelo.addRow(new Object[]{
-                p.getId_proyecto(),
-                nombreEmpresa,
-                p.getTitulo(),
-                p.getDescripcion(),
-                p.getEspacios(),
-                p.getDisponible()
+                    p.getId_proyecto(),
+                    nombreEmpresa,
+                    p.getTitulo(),
+                    p.getDescripcion(),
+                    p.getEspacios(),
+                    p.getDisponible()
             });
         }
 
@@ -266,64 +255,17 @@ public class CProyecto implements ActionListener, DocumentListener, ListSelectio
     public void insertUpdate(DocumentEvent e) {
         validarCampos();
         buscarProyectos();
-        hayCambiosSinGuardar = true;
-
     }
 
     @Override
     public void removeUpdate(DocumentEvent e) {
         validarCampos();
         buscarProyectos();
-        hayCambiosSinGuardar = true;
-
     }
 
     @Override
     public void changedUpdate(DocumentEvent e) {
         validarCampos();
         buscarProyectos();
-        hayCambiosSinGuardar = true;
-
     }
-
-    @Override
-    public void valueChanged(ListSelectionEvent e) {
-        if (!e.getValueIsAdjusting()) {
-            int filaSeleccionada = vista.jTable1.getSelectedRow();
-            if (filaSeleccionada == -1) {
-                vista.btnDescartar.setEnabled(false);
-                return;
-            }
-
-            if (hayCambiosSinGuardar) {
-                int opcion = JOptionPane.showConfirmDialog(
-                        vista,
-                        "Tienes cambios sin guardar. ¿Deseas descartarlos?",
-                        "Cambios no guardados",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE
-                );
-
-                if (opcion != JOptionPane.YES_OPTION) {
-                    vista.jTable1.clearSelection(); // cancelar selección
-                    return;
-                }
-            }
-
-            // Obtener y mostrar datos en los campos
-            int idProyecto = (int) vista.jTable1.getValueAt(filaSeleccionada, 0);
-            Proyecto p = modeloProyecto.obtenerPorId(idProyecto, empresas);
-            if (p != null) {
-                proyectoEnEdicion = p;
-                vista.txtTitulo.setText(p.getTitulo());
-                vista.txtDescripcion.setText(p.getDescripcion());
-                vista.txtEspacios.setText(String.valueOf(p.getEspacios()));
-                vista.txtEmpresa.setText(p.getEmpresas()[0].getNombre());
-                hayCambiosSinGuardar = false;
-            }
-
-            vista.btnDescartar.setEnabled(true);
-        }
-    }
-
 }

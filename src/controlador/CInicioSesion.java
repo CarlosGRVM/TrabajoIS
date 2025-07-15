@@ -30,7 +30,6 @@ public class CInicioSesion {
                 vista.ocultar.setVisible(true);
             }
         });
-
         vista.ocultar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -50,10 +49,20 @@ public class CInicioSesion {
             return;
         }
 
-        String correo = vista.usuario.getText();
-        String contrasenaTexto = new String(vista.contrasena.getPassword());
+        String correo = vista.usuario.getText().trim();
+        String contrasenaTexto = new String(vista.contrasena.getPassword()).trim();
+
+        if (correo.isEmpty() || contrasenaTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(vista, "Por favor completa todos los campos.");
+            return;
+        }
 
         try (Connection conn = ConexionSQL.conectar()) {
+            if (conn == null) {
+                JOptionPane.showMessageDialog(vista, "❌ No se pudo establecer la conexión.");
+                return;
+            }
+
             String sql = "SELECT nombre FROM usuario WHERE correo = ? AND contrasena = SHA2(?, 256)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, correo);
@@ -62,8 +71,7 @@ public class CInicioSesion {
 
             if (rs.next()) {
                 String nombreUsuario = rs.getString("nombre");
-
-                JOptionPane.showMessageDialog(vista, "Inicio de sesión exitoso");
+                JOptionPane.showMessageDialog(vista, "✅ Inicio de sesión exitoso");
                 Inicio siguiente = new Inicio();
                 new CInicio(siguiente, nombreUsuario);
                 siguiente.setVisible(true);
@@ -73,11 +81,12 @@ public class CInicioSesion {
                 seDesbloqueo = false;
             } else {
                 intentosFallidos++;
-                JOptionPane.showMessageDialog(vista, "Correo o contraseña incorrectos. Intento " + intentosFallidos + " de 3.");
+                JOptionPane.showMessageDialog(vista, "❌ Correo o contraseña incorrectos. Intento " + intentosFallidos + " de 3.");
 
                 if (intentosFallidos == 3) {
                     vista.ingresar.setEnabled(false);
-                    JOptionPane.showMessageDialog(vista, "Cuenta bloqueada. Espere 10 segundos.");
+                    JOptionPane.showMessageDialog(vista, "Cuenta bloqueada. Espera 10 segundos.");
+
                     Timer timer = new Timer(10000, e -> {
                         vista.ingresar.setEnabled(true);
                         seDesbloqueo = true;
@@ -97,7 +106,7 @@ public class CInicioSesion {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(vista, "Error de conexión: " + e.getMessage());
+            JOptionPane.showMessageDialog(vista, "❌ Error de conexión: " + e.getMessage());
         }
     }
 }

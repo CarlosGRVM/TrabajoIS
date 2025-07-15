@@ -91,8 +91,6 @@ public class ListaCandidato extends javax.swing.JFrame {
         btnMostrar.setFont(new java.awt.Font("Garuda", 0, 18)); // NOI18N
         btnMostrar.setText("Mostrar todos");
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/lupa-de-busqueda.png"))); // NOI18N
-
         jLabel9.setFont(new java.awt.Font("Garuda", 0, 18)); // NOI18N
         jLabel9.setText("Buscar por Numero de Control:");
 

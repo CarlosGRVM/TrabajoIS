@@ -355,4 +355,26 @@ public class Empresa {
         return false;
     }
 
+    public boolean actualizarEmpresa(Empresa empresa) {
+        try {
+            asegurarConexion();
+            String sql = """
+            UPDATE empresa SET rfc = ?, nombre = ?, direccion = ?, telefono = ?, correo = ?
+            WHERE id_empresa = ?
+        """;
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, empresa.getRfc());
+            stmt.setString(2, empresa.getNombre());
+            stmt.setString(3, empresa.getDireccion());
+            stmt.setString(4, empresa.getTelefono());
+            stmt.setString(5, empresa.getCorreo());
+            stmt.setInt(6, empresa.getId_empresa());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar empresa: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

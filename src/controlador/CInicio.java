@@ -111,8 +111,9 @@ public class CInicio {
     }
 
     private void cerrarSesion() {
-        vista.dispose();
+        vista.setVisible(false);
         inicioSesion login = new inicioSesion();
+        new CInicioSesion(login); // <- Asignas controlador al login
         login.setVisible(true);
         login.setLocationRelativeTo(null);
     }
@@ -121,42 +122,67 @@ public class CInicio {
     private void abrirNuevaLista() {
         vista.setVisible(false);
         RegistroCandidato registro = new RegistroCandidato();
+        controlador.GestorVistas.registrarTransicion(vista, registro);  // ← registrar
         registro.setVisible(true);
         registro.setLocationRelativeTo(null);
     }
 
     private void abrirEditarLista() {
-        // Abrir vista correspondiente
+        vista.setVisible(false);
+        ListaCandidato consultar = new ListaCandidato();
+        controlador.GestorVistas.registrarTransicion(vista, consultar);  // ← registrar
+        consultar.setVisible(true);
+        consultar.setLocationRelativeTo(null);
     }
 
     private void abrirRegistrarDocente() {
-        // Abrir vista correspondiente
+        vista.setVisible(false);
+        FormularioDocente docente = new FormularioDocente();
+        controlador.GestorVistas.registrarTransicion(vista, docente);  // ← registrar
+        docente.setVisible(true);
+        docente.setLocationRelativeTo(null);
     }
 
     private void abrirEditarDocente() {
-        // Abrir vista correspondiente
+        vista.setVisible(false);
+        RegistroCandidato registro = new RegistroCandidato();
+        controlador.GestorVistas.registrarTransicion(vista, registro);  // ← registrar
+        registro.setVisible(true);
+        registro.setLocationRelativeTo(null);
     }
 
     private void abrirBancoProyecto() {
         vista.setVisible(false);
-
-        Empresa modeloEmpresa = new Empresa(); // Instancia del modelo
-        FormatoEmpresa empresaVista = new FormatoEmpresa(); // Instancia de la vista
-        new CEmpresa(modeloEmpresa, empresaVista); // Instancia del controlador con modelo y vista
-
-        empresaVista.setVisible(true);
-        empresaVista.setLocationRelativeTo(null);
+        MenuProyectos menuVista = new MenuProyectos();
+        controlador.GestorVistas.registrarTransicion(vista, menuVista);  // ← registrar
+        new CCentroBanco(menuVista);
+        menuVista.setVisible(true);
+        menuVista.setLocationRelativeTo(null);
     }
 
     private void abrirCentroEstudiante() {
-        // Abrir vista correspondiente
+        vista.setVisible(false);
+        RegistroCandidato registro = new RegistroCandidato();
+        controlador.GestorVistas.registrarTransicion(vista, registro);  // ← registrar
+        registro.setVisible(true);
+        registro.setLocationRelativeTo(null);
     }
 
     private void abrirCentroDocente() {
-        // Abrir vista correspondiente
+        vista.setVisible(false);
+        FormularioDocente docente = new FormularioDocente();
+        controlador.GestorVistas.registrarTransicion(vista, docente);  // ← registrar
+        docente.setVisible(true);
+        docente.setLocationRelativeTo(null);
     }
 
     private void abrirCentroBanco() {
-        // Abrir vista correspondiente
+        vista.setVisible(false);
+        MenuProyectos menuVista = new MenuProyectos();
+        controlador.GestorVistas.registrarTransicion(vista, menuVista);  // ← registrar
+        new CCentroBanco(menuVista);
+        menuVista.setVisible(true);
+        menuVista.setLocationRelativeTo(null);
     }
+
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Proyecto {
@@ -294,6 +295,40 @@ public class Proyecto {
             System.err.println("Error al obtener proyecto por ID: " + e.getMessage());
         }
         return null;
+    }
+
+    public List<Proyecto> obtenerPorEmpresa(int idEmpresa, String campoOrden, boolean ascendente) {
+        List<Proyecto> proyectos = new ArrayList<>();
+
+        try {
+            asegurarConexion(); // si tienes este método, úsalo para garantizar conexión activa
+            String sql = "SELECT * FROM proyecto WHERE id_empresa = ? ORDER BY " + campoOrden + (ascendente ? " ASC" : " DESC");
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, idEmpresa);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Proyecto p = new Proyecto();
+                p.setId_proyecto(rs.getInt("id_proyecto"));
+                p.setTitulo(rs.getString("titulo"));
+                p.setDescripcion(rs.getString("Descripcion"));
+                p.setEspacios(rs.getInt("Espacios"));
+                p.setDisponible(rs.getString("Disponible"));
+                p.setTipo(rs.getString("Tipo"));
+
+                // Relacionar empresa
+                Empresa empresa = new Empresa();
+                empresa.setId_empresa(idEmpresa);
+                p.setEmpresas(new Empresa[]{empresa});
+
+                proyectos.add(p);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Error al obtener proyectos por empresa: " + e.getMessage());
+        }
+
+        return proyectos;
     }
 
 }
