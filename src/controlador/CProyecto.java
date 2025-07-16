@@ -2,7 +2,7 @@ package controlador;
 
 import modelo.*;
 import vista.FormatoProyecto;
-
+import java.sql.SQLException;
 import java.awt.event.*;
 import java.util.List;
 import javax.swing.*;
@@ -37,6 +37,12 @@ public class CProyecto implements ActionListener, DocumentListener {
         vista.lblEmpresaErr.setVisible(false);
         vista.lblTituloErr.setVisible(false);
 
+        // Llenar el JComboBox con nombres de empresas
+        vista.cboEmpresa.removeAllItems();
+        for (Empresa e : empresas) {
+            vista.cboEmpresa.addItem(e.getNombre());
+        }
+
         // Evitar selección en la tabla
         vista.jTable1.setRowSelectionAllowed(true);
     }
@@ -50,21 +56,32 @@ public class CProyecto implements ActionListener, DocumentListener {
         vista.txtTitulo.getDocument().addDocumentListener(this);
         vista.txtDescripcion.getDocument().addDocumentListener(this);
         vista.txtEspacios.getDocument().addDocumentListener(this);
-        vista.txtEmpresa.getDocument().addDocumentListener(this);
         vista.txtBuscar.getDocument().addDocumentListener(this);
 
-        // Activar botón eliminar si hay una fila seleccionada
+        vista.cboEmpresa.setEditable(true);
+
+        // Detectar escritura
+        JTextField editor = (JTextField) vista.cboEmpresa.getEditor().getEditorComponent();
+        editor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                filtrarEmpresas();
+            }
+        });
+
+        // Detectar selección de item
+        vista.cboEmpresa.addActionListener(e -> validarCampos());
+
         vista.jTable1.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 vista.btnDescartar.setEnabled(vista.jTable1.getSelectedRow() != -1);
             }
         });
-        
-        
+
         vista.lblRegresar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                controlador.GestorVistas.regresar(vista); // ← método universal para volver
+                controlador.GestorVistas.regresar(vista);
             }
         });
     }
@@ -73,9 +90,9 @@ public class CProyecto implements ActionListener, DocumentListener {
         String titulo = vista.txtTitulo.getText().trim();
         String descripcion = vista.txtDescripcion.getText().trim();
         String espaciosStr = vista.txtEspacios.getText().trim();
-        String nombreEmpresa = vista.txtEmpresa.getText().trim();
+        String nombreEmpresa = (String) vista.cboEmpresa.getSelectedItem(); // ← Cambio aquí
 
-        boolean camposLlenos = !titulo.isEmpty() && !descripcion.isEmpty() && !espaciosStr.isEmpty() && !nombreEmpresa.isEmpty();
+        boolean camposLlenos = !titulo.isEmpty() && !descripcion.isEmpty() && !espaciosStr.isEmpty() && nombreEmpresa != null;
 
         // Validación de espacios
         boolean espaciosValidos;
@@ -94,7 +111,7 @@ public class CProyecto implements ActionListener, DocumentListener {
                 break;
             }
         }
-        vista.lblEmpresaErr.setVisible(!nombreEmpresa.isEmpty() && !empresaExiste);
+        vista.lblEmpresaErr.setVisible(nombreEmpresa != null && !empresaExiste);
 
         // Validación título duplicado
         boolean tituloExiste = !titulo.isEmpty() && modeloProyecto.existeTitulo(titulo);
@@ -109,10 +126,10 @@ public class CProyecto implements ActionListener, DocumentListener {
         p.setTitulo(vista.txtTitulo.getText().trim());
         p.setDescripcion(vista.txtDescripcion.getText().trim());
         p.setEspacios(Integer.parseInt(vista.txtEspacios.getText().trim()));
-        p.setDisponible("Sí");
-        p.setTipo("N/R");
+        p.setDisponible("Disponible");
+        p.setTipo("Anteproyecto");
 
-        String nombreEmpresa = vista.txtEmpresa.getText().trim();
+        String nombreEmpresa = (String) vista.cboEmpresa.getSelectedItem();
         for (Empresa e : empresas) {
             if (e.getNombre().equalsIgnoreCase(nombreEmpresa)) {
                 p.setEmpresas(new Empresa[]{e});
@@ -131,12 +148,12 @@ public class CProyecto implements ActionListener, DocumentListener {
         for (Proyecto p : lista) {
             String nombreEmpresa = p.getEmpresas()[0] != null ? p.getEmpresas()[0].getNombre() : "N/D";
             modelo.addRow(new Object[]{
-                    p.getId_proyecto(),
-                    nombreEmpresa,
-                    p.getTitulo(),
-                    p.getDescripcion(),
-                    p.getEspacios(),
-                    p.getDisponible()
+                p.getId_proyecto(),
+                nombreEmpresa,
+                p.getTitulo(),
+                p.getDescripcion(),
+                p.getEspacios(),
+                p.getDisponible()
             });
         }
 
@@ -146,19 +163,27 @@ public class CProyecto implements ActionListener, DocumentListener {
 
     private void insertarProyecto() {
         Proyecto nuevo = construirProyectoDesdeVista();
+
         if (nuevo.getEmpresas() == null || nuevo.getEmpresas()[0] == null) {
             vista.lblEmpresaErr.setVisible(true);
             return;
         }
 
-        boolean exito = nuevo.insertarProyecto(nuevo.getEmpresas()[0].getId_empresa());
+        try {
+            boolean exito = nuevo.insertarProyecto(nuevo.getEmpresas()[0].getId_empresa());
 
-        if (exito) {
-            JOptionPane.showMessageDialog(vista, "Proyecto registrado correctamente.");
-            limpiarFormulario();
-            mostrarProyectos();
-        } else {
-            JOptionPane.showMessageDialog(vista, "Error al registrar proyecto.");
+            if (exito) {
+                JOptionPane.showMessageDialog(vista, "Proyecto registrado correctamente.");
+                limpiarFormulario();
+                mostrarProyectos();
+            } else {
+                JOptionPane.showMessageDialog(vista, "Error desconocido al registrar proyecto.");
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(vista, "❌ Error al insertar proyecto:\n" + e.getMessage(),
+                    "Error SQL", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace(); // También en consola para depurar
         }
     }
 
@@ -170,14 +195,19 @@ public class CProyecto implements ActionListener, DocumentListener {
         }
 
         int idProyecto = (int) vista.jTable1.getValueAt(fila, 0);
-        int confirm = JOptionPane.showConfirmDialog(vista, "¿Eliminar este proyecto?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(
+                vista,
+                "¿Deseas ocultar este proyecto del sistema?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION
+        );
 
         if (confirm == JOptionPane.YES_OPTION) {
             if (modeloProyecto.eliminarProyecto(idProyecto)) {
-                JOptionPane.showMessageDialog(vista, "Proyecto eliminado");
+                JOptionPane.showMessageDialog(vista, "Proyecto eliminado correctamente.");
                 mostrarProyectos();
             } else {
-                JOptionPane.showMessageDialog(vista, "Error al eliminar proyecto");
+                JOptionPane.showMessageDialog(vista, "Error al ocultar proyecto.");
             }
         }
     }
@@ -187,13 +217,14 @@ public class CProyecto implements ActionListener, DocumentListener {
         vista.btnOrdenar.setText(ordenAscendente ? "Ascendente" : "Descendente");
         mostrarProyectos();
     }
-    
+
     private void limpiarFormulario() {
-        vista.txtEmpresa.setText("");
+        if (vista.cboEmpresa.getItemCount() > 0) {
+            vista.cboEmpresa.setSelectedIndex(0); // ← limpia selección a la primera empresa
+        }
         vista.txtTitulo.setText("");
         vista.txtDescripcion.setText("");
         vista.txtEspacios.setText("");
-        
     }
 
     private void cambiarFiltro() {
@@ -221,8 +252,8 @@ public class CProyecto implements ActionListener, DocumentListener {
 
         List<Proyecto> filtrados = lista.stream()
                 .filter(p -> p.getTitulo().toLowerCase().contains(texto)
-                        || p.getDescripcion().toLowerCase().contains(texto)
-                        || (p.getEmpresas()[0] != null && p.getEmpresas()[0].getNombre().toLowerCase().contains(texto)))
+                || p.getDescripcion().toLowerCase().contains(texto)
+                || (p.getEmpresas()[0] != null && p.getEmpresas()[0].getNombre().toLowerCase().contains(texto)))
                 .toList();
 
         DefaultTableModel modelo = new DefaultTableModel(
@@ -231,12 +262,12 @@ public class CProyecto implements ActionListener, DocumentListener {
         for (Proyecto p : filtrados) {
             String nombreEmpresa = p.getEmpresas()[0] != null ? p.getEmpresas()[0].getNombre() : "N/D";
             modelo.addRow(new Object[]{
-                    p.getId_proyecto(),
-                    nombreEmpresa,
-                    p.getTitulo(),
-                    p.getDescripcion(),
-                    p.getEspacios(),
-                    p.getDisponible()
+                p.getId_proyecto(),
+                nombreEmpresa,
+                p.getTitulo(),
+                p.getDescripcion(),
+                p.getEspacios(),
+                p.getDisponible()
             });
         }
 
@@ -276,4 +307,22 @@ public class CProyecto implements ActionListener, DocumentListener {
         validarCampos();
         buscarProyectos();
     }
+
+    private void filtrarEmpresas() {
+        SwingUtilities.invokeLater(() -> {
+            String texto = ((JTextField) vista.cboEmpresa.getEditor().getEditorComponent()).getText().trim().toLowerCase();
+
+            vista.cboEmpresa.removeAllItems();
+
+            for (Empresa e : empresas) {
+                if (e.getNombre().toLowerCase().contains(texto)) {
+                    vista.cboEmpresa.addItem(e.getNombre());
+                }
+            }
+
+            vista.cboEmpresa.getEditor().setItem(texto);
+            vista.cboEmpresa.setPopupVisible(true);
+        });
+    }
+
 }

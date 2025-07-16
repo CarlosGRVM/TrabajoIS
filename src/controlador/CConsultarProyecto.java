@@ -1,7 +1,6 @@
 package controlador;
 
-import modelo.Empresa;
-import modelo.Proyecto;
+import modelo.*;
 import vista.ConsultarProyecto;
 
 import javax.swing.*;
@@ -16,6 +15,7 @@ public class CConsultarProyecto {
 
     private final ConsultarProyecto vista;
     private final Proyecto modeloProyecto;
+    private final List<Empresa> empresas = new Empresa().obtenerTodo();
     private Empresa empresaSeleccionada = null;
     private List<Proyecto> proyectosActuales = new ArrayList<>();
     private boolean hayCambiosSinGuardar = false;
@@ -32,32 +32,30 @@ public class CConsultarProyecto {
     private void inicializar() {
         vista.lblErrorEmpresa.setVisible(false);
 
-        vista.txtEmpresa.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                buscarEmpresa();
-            }
+        // Configurar ComboBox
+        vista.cboEmpresa.setEditable(true);
+        vista.cboEmpresa.removeAllItems();
+        for (Empresa e : empresas) {
+            vista.cboEmpresa.addItem(e.getNombre());
+        }
 
-            public void removeUpdate(DocumentEvent e) {
-                buscarEmpresa();
-            }
-
-            public void changedUpdate(DocumentEvent e) {
-                buscarEmpresa();
+        // Filtrar dinámicamente
+        JTextField editor = (JTextField) vista.cboEmpresa.getEditor().getEditorComponent();
+        editor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                filtrarEmpresas();
             }
         });
 
+        // Detectar selección
+        vista.cboEmpresa.addActionListener(e -> buscarEmpresa());
+
+        // Buscar texto en proyectos
         vista.txtBuscarProyecto.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                filtrarProyectos();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                filtrarProyectos();
-            }
-
-            public void changedUpdate(DocumentEvent e) {
-                filtrarProyectos();
-            }
+            public void insertUpdate(DocumentEvent e) { filtrarProyectos(); }
+            public void removeUpdate(DocumentEvent e) { filtrarProyectos(); }
+            public void changedUpdate(DocumentEvent e) { filtrarProyectos(); }
         });
 
         vista.btnFiltro.addActionListener(e -> cambiarFiltro());
@@ -69,11 +67,11 @@ public class CConsultarProyecto {
                 confirmarSalida();
             }
         });
-        
+
         vista.lblRegresar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                controlador.GestorVistas.regresar(vista); // ← método universal para volver
+                controlador.GestorVistas.regresar(vista);
             }
         });
 
@@ -81,25 +79,41 @@ public class CConsultarProyecto {
     }
 
     private void buscarEmpresa() {
-        String nombre = vista.txtEmpresa.getText().trim();
+        String nombre = (String) vista.cboEmpresa.getEditor().getItem();
 
-        Empresa modelo = new Empresa();
-        List<Empresa> empresas = modelo.obtenerTodo();
-
+        empresaSeleccionada = null;
         for (Empresa e : empresas) {
             if (e.getNombre().equalsIgnoreCase(nombre)) {
                 empresaSeleccionada = e;
-                vista.lblErrorEmpresa.setVisible(false);
-                cargarProyectosDeEmpresa();
-                return;
+                break;
             }
         }
 
-        // Empresa no encontrada
-        empresaSeleccionada = null;
-        proyectosActuales.clear();
-        actualizarTabla(new ArrayList<>());
-        vista.lblErrorEmpresa.setVisible(true);
+        if (empresaSeleccionada != null) {
+            vista.lblErrorEmpresa.setVisible(false);
+            cargarProyectosDeEmpresa();
+        } else {
+            proyectosActuales.clear();
+            actualizarTabla(new ArrayList<>());
+            vista.lblErrorEmpresa.setVisible(true);
+        }
+    }
+
+    private void filtrarEmpresas() {
+        SwingUtilities.invokeLater(() -> {
+            String texto = ((JTextField) vista.cboEmpresa.getEditor().getEditorComponent())
+                    .getText().trim().toLowerCase();
+
+            vista.cboEmpresa.removeAllItems();
+            for (Empresa e : empresas) {
+                if (e.getNombre().toLowerCase().contains(texto)) {
+                    vista.cboEmpresa.addItem(e.getNombre());
+                }
+            }
+
+            vista.cboEmpresa.getEditor().setItem(texto);
+            vista.cboEmpresa.setPopupVisible(true);
+        });
     }
 
     private void cargarProyectosDeEmpresa() {
@@ -115,17 +129,16 @@ public class CConsultarProyecto {
 
         for (Proyecto p : lista) {
             modelo.addRow(new Object[]{
-                p.getId_proyecto(),
-                p.getTitulo(),
-                p.getDescripcion(),
-                p.getEspacios(),
-                p.getDisponible()
+                    p.getId_proyecto(),
+                    p.getTitulo(),
+                    p.getDescripcion(),
+                    p.getEspacios(),
+                    p.getDisponible()
             });
         }
 
         vista.jTable1.setModel(modelo);
-        vista.lblContador.setText("Proyectos registrado: " + lista.size());
-
+        vista.lblContador.setText("Proyectos registrados: " + lista.size());
         modelo.addTableModelListener(e -> hayCambiosSinGuardar = true);
     }
 

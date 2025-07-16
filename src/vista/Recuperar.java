@@ -51,6 +51,11 @@ public class Recuperar extends javax.swing.JFrame {
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Iniciar Sesion");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -129,6 +134,14 @@ public class Recuperar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+         inicioSesion inicio = new inicioSesion(); 
+        inicio.setVisible(true); 
+        inicio.setLocationRelativeTo(null); 
+        this.dispose();
+
+    }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
      * @param args the command line arguments

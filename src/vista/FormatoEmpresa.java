@@ -99,6 +99,8 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         lblContador.setForeground(new java.awt.Color(0, 0, 0));
         lblContador.setText("Empresas registradas: 0");
 
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/lupa.png"))); // NOI18N
+
         lblRfcError.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         lblRfcError.setForeground(new java.awt.Color(204, 0, 0));
         lblRfcError.setText("RFC ya registrado");
@@ -143,12 +145,16 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         txtBuscador.setBackground(new java.awt.Color(255, 255, 255));
         txtBuscador.setForeground(new java.awt.Color(0, 0, 0));
 
+        btnAnadir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/agregar-boton.png"))); // NOI18N
         btnAnadir.setContentAreaFilled(false);
 
+        btnDescartar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/circulo.png"))); // NOI18N
         btnDescartar.setContentAreaFilled(false);
 
-        btnFiltro.setText("RFC");
+        btnFiltro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/filtrar.png"))); // NOI18N
+        btnFiltro.setText("No. Lista");
 
+        btnOrden.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/ordenar.png"))); // NOI18N
         btnOrden.setText("Ascendentre");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -267,7 +273,7 @@ public class FormatoEmpresa extends javax.swing.JFrame {
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblCorreoError)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAnadir)
                     .addComponent(btnDescartar))

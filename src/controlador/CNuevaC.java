@@ -43,7 +43,6 @@ public class CNuevaC implements ActionListener {
                 JOptionPane.showMessageDialog(vistaNuevaC, "Por favor, ingresa tu nueva contraseña.", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            
             // Aquí puedes agregar validaciones de complejidad de contraseña (longitud, caracteres, etc.)
             // if (nuevaContrasena.length() < 6) {
             //    JOptionPane.showMessageDialog(vistaNuevaC, "La contraseña debe tener al menos 6 caracteres.", "Contraseña Débil", JOptionPane.WARNING_MESSAGE);

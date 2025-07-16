@@ -99,6 +99,7 @@ public class inicioSesion extends javax.swing.JFrame {
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Instituto_Tecnologico_de_Oaxaca_-_original.svg (2).png"))); // NOI18N
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 40, 80, 100));
 
+        usuario.setText("carlos9.cm9@gmail.com");
         usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usuarioActionPerformed(evt);
@@ -106,6 +107,7 @@ public class inicioSesion extends javax.swing.JFrame {
         });
         jPanel2.add(usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 178, 220, -1));
 
+        contrasena.setText("contrasena1");
         contrasena.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contrasenaActionPerformed(evt);
@@ -229,7 +231,7 @@ public javax.swing.JButton getBotonEntrar() {
     private javax.swing.JPanel jPanel3;
     public javax.swing.JLabel mostrar;
     public javax.swing.JLabel ocultar;
-    private javax.swing.JLabel olvide_contrsena;
+    public javax.swing.JLabel olvide_contrsena;
     public javax.swing.JButton salir;
     public javax.swing.JTextField usuario;
     // End of variables declaration//GEN-END:variables

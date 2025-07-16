@@ -138,6 +138,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="olvide mi contrase&#xf1;a"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="108" y="397" width="-1" height="-1"/>
@@ -157,6 +160,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="usuario">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="carlos9.cm9@gmail.com"/>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usuarioActionPerformed"/>
               </Events>
@@ -170,6 +176,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JPasswordField" name="contrasena">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="contrasena1"/>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contrasenaActionPerformed"/>
               </Events>

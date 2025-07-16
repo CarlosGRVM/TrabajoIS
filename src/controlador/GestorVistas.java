@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GestorVistas {
-
     private static final Map<JFrame, JFrame> mapaVistas = new HashMap<>();
-
     /**
      * Registra que la vista "actual" fue abierta por "anterior"
      */
@@ -16,7 +14,6 @@ public class GestorVistas {
             mapaVistas.put(actual, anterior);
         }
     }
-
     /**
      * Regresa a la vista anterior desde la actual, si está registrada
      */

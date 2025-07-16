@@ -143,49 +143,48 @@ public class Proyecto {
         return -1;
     }
 
-    public boolean insertarProyecto(int idEmpresa) {
-        try {
-            asegurarConexion();
+    public boolean insertarProyecto(int idEmpresa) throws SQLException {
+        asegurarConexion();
 
-            // Verificar existencia de empresa
-            String sqlVerificar = "SELECT COUNT(*) FROM empresa WHERE id_empresa = ?";
-            PreparedStatement stmtVerificar = conexion.prepareStatement(sqlVerificar);
-            stmtVerificar.setInt(1, idEmpresa);
-            ResultSet rsVerificar = stmtVerificar.executeQuery();
-            if (rsVerificar.next() && rsVerificar.getInt(1) == 0) {
-                return false;
-            }
-
-            // Generar ID si no está definido
-            if (this.id_proyecto <= 0) {
-                this.id_proyecto = generarSiguienteId();
-            }
-
-            // Insertar proyecto
-            String sql = "INSERT INTO proyecto (id_proyecto, titulo, descripcion, espacios, disponible, tipo, id_empresa) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conexion.prepareStatement(sql);
-            stmt.setInt(1, this.id_proyecto);
-            stmt.setString(2, titulo);
-            stmt.setString(3, descripcion);
-            stmt.setInt(4, espacios);
-            stmt.setString(5, "Disponible");     // Valor por defecto
-            stmt.setString(6, "Anteproyecto");   // Valor por defecto
-            stmt.setInt(7, idEmpresa);
-
-            int filas = stmt.executeUpdate();
-            return filas > 0;
-
-        } catch (SQLException e) {
-            return false;
+        if (conexion == null) {
+            throw new SQLException("❌ No se pudo establecer la conexión a la base de datos.");
         }
+
+        // Verificar existencia de empresa
+        String sqlVerificar = "SELECT COUNT(*) FROM empresa WHERE id_empresa = ?";
+        PreparedStatement stmtVerificar = conexion.prepareStatement(sqlVerificar);
+        stmtVerificar.setInt(1, idEmpresa);
+        ResultSet rsVerificar = stmtVerificar.executeQuery();
+        if (rsVerificar.next() && rsVerificar.getInt(1) == 0) {
+            throw new SQLException("❌ No existe la empresa con ID: " + idEmpresa);
+        }
+
+        // Generar ID si no está definido
+        if (this.id_proyecto <= 0) {
+            this.id_proyecto = generarSiguienteId();
+        }
+
+        String sql = "INSERT INTO proyecto (id_proyecto, titulo, descripcion, espacios, disponible, tipo, id_empresa, activo) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, TRUE)";
+        PreparedStatement stmt = conexion.prepareStatement(sql);
+        stmt.setInt(1, this.id_proyecto);
+        stmt.setString(2, titulo);
+        stmt.setString(3, descripcion);
+        stmt.setInt(4, espacios);
+        stmt.setString(5, "Disponible");
+        stmt.setString(6, "Anteproyecto");
+        stmt.setInt(7, idEmpresa);
+
+        int filas = stmt.executeUpdate();
+        return filas > 0;
     }
 
     public List<Proyecto> obtenerTodos(Empresa[] empresas, String campoOrden, boolean asc) {
-        List<Proyecto> lista = new java.util.ArrayList<>();
+        List<Proyecto> lista = new ArrayList<>();
         try {
             asegurarConexion();
-            String sql = "SELECT * FROM proyecto ORDER BY " + campoOrden + (asc ? " ASC" : " DESC");
+            String sql = "SELECT * FROM proyecto WHERE activo = TRUE AND disponible = 'Disponible' ORDER BY "
+                    + campoOrden + (asc ? " ASC" : " DESC");
             PreparedStatement stmt = conexion.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
@@ -220,12 +219,12 @@ public class Proyecto {
     public boolean eliminarProyecto(int id) {
         try {
             asegurarConexion();
-            String sql = "DELETE FROM proyecto WHERE id_proyecto = ?";
+            String sql = "UPDATE proyecto SET activo = FALSE WHERE id_proyecto = ?";
             PreparedStatement stmt = conexion.prepareStatement(sql);
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error al eliminar proyecto: " + e.getMessage());
+            System.err.println("Error al eliminar proyecto (lógicamente): " + e.getMessage());
             return false;
         }
     }
@@ -301,8 +300,9 @@ public class Proyecto {
         List<Proyecto> proyectos = new ArrayList<>();
 
         try {
-            asegurarConexion(); // si tienes este método, úsalo para garantizar conexión activa
-            String sql = "SELECT * FROM proyecto WHERE id_empresa = ? ORDER BY " + campoOrden + (ascendente ? " ASC" : " DESC");
+            asegurarConexion();
+            String sql = "SELECT * FROM proyecto WHERE id_empresa = ? AND activo = TRUE AND disponible = 'Disponible' ORDER BY "
+                    + campoOrden + (ascendente ? " ASC" : " DESC");
             PreparedStatement stmt = conexion.prepareStatement(sql);
             stmt.setInt(1, idEmpresa);
 
@@ -311,12 +311,11 @@ public class Proyecto {
                 Proyecto p = new Proyecto();
                 p.setId_proyecto(rs.getInt("id_proyecto"));
                 p.setTitulo(rs.getString("titulo"));
-                p.setDescripcion(rs.getString("Descripcion"));
-                p.setEspacios(rs.getInt("Espacios"));
-                p.setDisponible(rs.getString("Disponible"));
-                p.setTipo(rs.getString("Tipo"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setEspacios(rs.getInt("espacios"));
+                p.setDisponible(rs.getString("disponible"));
+                p.setTipo(rs.getString("tipo"));
 
-                // Relacionar empresa
                 Empresa empresa = new Empresa();
                 empresa.setId_empresa(idEmpresa);
                 p.setEmpresas(new Empresa[]{empresa});

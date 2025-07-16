@@ -10,9 +10,7 @@ import vista.Verificar; // Necesitamos esta vista para abrirla
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-
 public class CRecuperar implements ActionListener {
-
     private Recuperar vistaRecuperar;
     private Gestor modeloGestor;
 
@@ -23,23 +21,19 @@ public class CRecuperar implements ActionListener {
         // Asociar el ActionListener al botón de la vista
         this.vistaRecuperar.btnEnviar.addActionListener(this);
     }
-
     public void iniciar() {
         vistaRecuperar.setTitle("Recuperar Contraseña");
         vistaRecuperar.setLocationRelativeTo(null); // Centrar la ventana
         vistaRecuperar.setVisible(true);
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vistaRecuperar.btnEnviar) {
             String correo = vistaRecuperar.txtCorreo.getText();
-
             if (correo.isEmpty()) {
                 JOptionPane.showMessageDialog(vistaRecuperar, "Por favor, ingresa tu correo electrónico.", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
             if (modeloGestor.verificarCorreoExistente(correo)) {
                 if (modeloGestor.enviarCodigoRecuperacion(correo)) {
                     JOptionPane.showMessageDialog(vistaRecuperar, "Código de recuperación enviado a tu correo.", "Correo Enviado", JOptionPane.INFORMATION_MESSAGE);

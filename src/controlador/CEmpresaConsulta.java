@@ -10,6 +10,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class CEmpresaConsulta {
 
@@ -17,6 +19,8 @@ public class CEmpresaConsulta {
     private final Empresa modelo;
     private boolean hayCambiosSinGuardar = false;
     private List<Empresa> empresasOriginales;
+    private String categoriaOrden = "id_empresa";
+    private boolean ordenAscendente = true;
 
     public CEmpresaConsulta(ConsultaEmpresa vista) {
         this.vista = vista;
@@ -37,12 +41,12 @@ public class CEmpresaConsulta {
 
         for (Empresa e : empresasOriginales) {
             tableModel.addRow(new Object[]{
-                    e.getId_empresa(),
-                    e.getRfc(),
-                    e.getNombre(),
-                    e.getDireccion(),
-                    e.getTelefono(),
-                    e.getCorreo()
+                e.getId_empresa(),
+                e.getRfc(),
+                e.getNombre(),
+                e.getDireccion(),
+                e.getTelefono(),
+                e.getCorreo()
             });
         }
 
@@ -64,11 +68,30 @@ public class CEmpresaConsulta {
                 confirmarSalida();
             }
         });
-        
+
         vista.lblRegresar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 controlador.GestorVistas.regresar(vista); // ← método universal para volver
+            }
+        });
+
+        vista.btnFiltro.addActionListener(e -> cambiarCategoria());
+        vista.btnOrden.addActionListener(e -> cambiarOrden());
+        vista.txtBuscador.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrarYOrdenar();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrarYOrdenar();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrarYOrdenar();
             }
         });
     }
@@ -116,5 +139,73 @@ public class CEmpresaConsulta {
 
         hayCambiosSinGuardar = false;
         JOptionPane.showMessageDialog(vista, "Cambios guardados correctamente (" + actualizados + " registros).");
+    }
+
+    private void cambiarCategoria() {
+        String[] categorias = {"No. Lista", "RFC", "Nombre", "Teléfono", "Correo"};
+        String actual = vista.btnFiltro.getText();  // Por ejemplo: "Nombre"
+        int index = java.util.Arrays.asList(categorias).indexOf(actual);
+        int siguiente = (index + 1) % categorias.length;
+
+        vista.btnFiltro.setText(categorias[siguiente]);
+
+        // Mapear al campo de BD
+        categoriaOrden = switch (categorias[siguiente]) {
+            case "No. Lista" ->
+                "id_empresa";
+            case "RFC" ->
+                "rfc";
+            case "Nombre" ->
+                "nombre";
+            case "Teléfono" ->
+                "telefono";
+            case "Correo" ->
+                "correo";
+            default ->
+                "id_empresa";
+        };
+
+        filtrarYOrdenar();
+    }
+
+    private void filtrarYOrdenar() {
+        String valor = vista.txtBuscador.getText().trim();
+        List<Empresa> listaFiltrada;
+
+        if (valor.isEmpty()) {
+            // Si el buscador está vacío, ordenar por categoría
+            listaFiltrada = modelo.ordenarPor(categoriaOrden, ordenAscendente);
+        } else {
+            // Si hay texto, buscar en todos los campos (multicampo)
+            listaFiltrada = modelo.buscarMulticampo(valor);
+        }
+
+        mostrarEmpresasFiltradas(listaFiltrada);
+    }
+
+    private void cambiarOrden() {
+        ordenAscendente = !ordenAscendente;
+        vista.btnOrden.setText(ordenAscendente ? "Ascendente" : "Descendente");
+        filtrarYOrdenar();
+    }
+
+    private void mostrarEmpresasFiltradas(List<Empresa> lista) {
+        String[] columnas = {"No. Lista", "RFC", "Nombre", "Dirección", "Teléfono", "Correo"};
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+        for (Empresa e : lista) {
+            Object[] fila = {
+                e.getId_empresa(),
+                e.getRfc(),
+                e.getNombre(),
+                e.getDireccion(),
+                e.getTelefono(),
+                e.getCorreo()
+            };
+            modelo.addRow(fila);
+        }
+
+        vista.jTable1.setModel(modelo);
+        vista.lblContador.setText("Empresas registradas: " + lista.size());
     }
 }

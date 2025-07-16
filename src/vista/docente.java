@@ -21,16 +21,16 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-public class FormularioDocente extends javax.swing.JFrame {
+public class docente extends javax.swing.JFrame {
 
     private DocenteControlador controller;
 
     /**
      * Creates new form docente
      */
-    public FormularioDocente() {
+    public docente() {
         initComponents();
-        
+        this.controller = new DocenteControlador(this);
         controller.deshabilitarCamposFormulario();
     }
 
@@ -84,6 +84,7 @@ public class FormularioDocente extends javax.swing.JFrame {
 
         botonregre.setBackground(new java.awt.Color(51, 51, 255));
         botonregre.setForeground(new java.awt.Color(51, 51, 255));
+        botonregre.setIcon(new javax.swing.ImageIcon("D:\\alexv\\Downloads\\flecha3.png")); // NOI18N
         botonregre.setText("Atras");
         botonregre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,8 +97,8 @@ public class FormularioDocente extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(botonregre, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 747, Short.MAX_VALUE))
+                .addComponent(botonregre, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 721, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,7 +108,7 @@ public class FormularioDocente extends javax.swing.JFrame {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 810, 50));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 750, 50));
 
         lb_empleado.setText("No. empleado");
         getContentPane().add(lb_empleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 74, 80, -1));
@@ -210,7 +211,7 @@ public class FormularioDocente extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-   
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BGUARDAR;

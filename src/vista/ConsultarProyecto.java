@@ -31,12 +31,12 @@ public class ConsultarProyecto extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lblContador = new javax.swing.JLabel();
         lblErrorEmpresa = new javax.swing.JLabel();
-        txtEmpresa = new javax.swing.JTextField();
         txtBuscarProyecto = new javax.swing.JTextField();
         btnFiltro = new javax.swing.JButton();
         btnOrdenar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        cboEmpresa = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,7 +68,7 @@ public class ConsultarProyecto extends javax.swing.JFrame {
         lblRfc.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblRfc.setText("Nombre de la empresa");
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/oculto (1).png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/lupa.png"))); // NOI18N
 
         lblContador.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         lblContador.setForeground(new java.awt.Color(0, 0, 0));
@@ -78,16 +78,13 @@ public class ConsultarProyecto extends javax.swing.JFrame {
         lblErrorEmpresa.setForeground(new java.awt.Color(204, 0, 0));
         lblErrorEmpresa.setText("Empresa no encontrada o mal escrita");
 
-        txtEmpresa.setBackground(new java.awt.Color(255, 255, 255));
-        txtEmpresa.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        txtEmpresa.setForeground(new java.awt.Color(0, 0, 0));
-        txtEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
         txtBuscarProyecto.setBackground(new java.awt.Color(255, 255, 255));
         txtBuscarProyecto.setForeground(new java.awt.Color(0, 0, 0));
 
+        btnFiltro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/filtrar.png"))); // NOI18N
         btnFiltro.setText("Empresa");
 
+        btnOrdenar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/ordenar.png"))); // NOI18N
         btnOrdenar.setText("Ascendente");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -103,6 +100,10 @@ public class ConsultarProyecto extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        cboEmpresa.setBackground(new java.awt.Color(255, 255, 255));
+        cboEmpresa.setEditable(true);
+        cboEmpresa.setForeground(new java.awt.Color(0, 0, 0));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -111,7 +112,7 @@ public class ConsultarProyecto extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(100, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtBuscarProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -124,14 +125,14 @@ public class ConsultarProyecto extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblContador, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1078, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(75, 75, 75)
                         .addComponent(lblRfc, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblErrorEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 730, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 174, Short.MAX_VALUE)))
+                            .addComponent(cboEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(42, 42, 42))
         );
         jPanel1Layout.setVerticalGroup(
@@ -139,13 +140,12 @@ public class ConsultarProyecto extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRfc, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblErrorEmpresa)))
-                .addGap(74, 74, 74)
+                    .addComponent(cboEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblErrorEmpresa)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtBuscarProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -155,7 +155,7 @@ public class ConsultarProyecto extends javax.swing.JFrame {
                         .addComponent(btnOrdenar)
                         .addComponent(lblContador)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -183,6 +183,7 @@ public class ConsultarProyecto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnFiltro;
     public javax.swing.JButton btnOrdenar;
+    public javax.swing.JComboBox<String> cboEmpresa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -193,6 +194,5 @@ public class ConsultarProyecto extends javax.swing.JFrame {
     public javax.swing.JLabel lblRegresar;
     private javax.swing.JLabel lblRfc;
     public javax.swing.JTextField txtBuscarProyecto;
-    public javax.swing.JTextField txtEmpresa;
     // End of variables declaration//GEN-END:variables
 }

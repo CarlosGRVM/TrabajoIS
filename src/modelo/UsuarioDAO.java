@@ -10,14 +10,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-
 public class UsuarioDAO {
     private ConexionSQL conexionBD;
 
     public UsuarioDAO() {
         conexionBD = new ConexionSQL();
     }
-
     public boolean existeUsuarioPorCorreo(String email) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -46,7 +44,6 @@ public class UsuarioDAO {
         }
         return existe;
     }
-
     public boolean actualizarContrasenaUsuario(String email, String nuevaContrasena) {
         Connection con = null;
         PreparedStatement ps = null;

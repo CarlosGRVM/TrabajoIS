@@ -38,7 +38,6 @@ public class FormatoProyecto extends javax.swing.JFrame {
         txtEspacios = new javax.swing.JTextField();
         txtDescripcion = new javax.swing.JTextField();
         txtTitulo = new javax.swing.JTextField();
-        txtEmpresa = new javax.swing.JTextField();
         txtBuscar = new javax.swing.JTextField();
         btnFiltro = new javax.swing.JButton();
         btnOrdenar = new javax.swing.JButton();
@@ -46,6 +45,7 @@ public class FormatoProyecto extends javax.swing.JFrame {
         btnDescartar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        cboEmpresa = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,6 +92,8 @@ public class FormatoProyecto extends javax.swing.JFrame {
         lblTelefono.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTelefono.setText("Descripcion:");
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/lupa.png"))); // NOI18N
+
         lblContador.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         lblContador.setForeground(new java.awt.Color(0, 0, 0));
         lblContador.setText("Proyectos registrado: 0");
@@ -119,20 +121,19 @@ public class FormatoProyecto extends javax.swing.JFrame {
         txtTitulo.setForeground(new java.awt.Color(0, 0, 0));
         txtTitulo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        txtEmpresa.setBackground(new java.awt.Color(255, 255, 255));
-        txtEmpresa.setFont(new java.awt.Font("Calibri", 0, 20)); // NOI18N
-        txtEmpresa.setForeground(new java.awt.Color(0, 0, 0));
-        txtEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
         txtBuscar.setBackground(new java.awt.Color(255, 255, 255));
         txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
 
+        btnFiltro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/filtrar.png"))); // NOI18N
         btnFiltro.setText("Empresa");
 
+        btnOrdenar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/ordenar.png"))); // NOI18N
         btnOrdenar.setText("Ascendente");
 
+        btnAnadir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/agregar-boton.png"))); // NOI18N
         btnAnadir.setContentAreaFilled(false);
 
+        btnDescartar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/circulo.png"))); // NOI18N
         btnDescartar.setContentAreaFilled(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -147,6 +148,10 @@ public class FormatoProyecto extends javax.swing.JFrame {
             }
         ));
         jScrollPane1.setViewportView(jTable1);
+
+        cboEmpresa.setBackground(new java.awt.Color(255, 255, 255));
+        cboEmpresa.setEditable(true);
+        cboEmpresa.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -174,13 +179,13 @@ public class FormatoProyecto extends javax.swing.JFrame {
                                     .addComponent(lblTituloErr, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 930, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(100, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel1)
-                                .addGap(167, 167, 167)
+                                .addGap(137, 137, 137)
                                 .addComponent(btnFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,14 +197,15 @@ public class FormatoProyecto extends javax.swing.JFrame {
                         .addComponent(lblRfc, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 930, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblEmpresaErr, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblEmpresaErr, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(cboEmpresa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(42, 42, 42))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnAnadir)
-                .addGap(18, 18, 18)
+                .addGap(49, 49, 49)
                 .addComponent(btnDescartar)
                 .addGap(492, 492, 492))
         );
@@ -208,15 +214,15 @@ public class FormatoProyecto extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblRfc, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblRfc, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblEmpresaErr)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNombre))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNombre)
+                    .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTituloErr)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -228,10 +234,10 @@ public class FormatoProyecto extends javax.swing.JFrame {
                     .addComponent(txtEspacios, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblDireccion))
                 .addGap(43, 43, 43)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAnadir)
-                    .addComponent(btnDescartar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAnadir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDescartar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,6 +277,7 @@ public class FormatoProyecto extends javax.swing.JFrame {
     public javax.swing.JButton btnDescartar;
     public javax.swing.JButton btnFiltro;
     public javax.swing.JButton btnOrdenar;
+    public javax.swing.JComboBox<String> cboEmpresa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -286,7 +293,6 @@ public class FormatoProyecto extends javax.swing.JFrame {
     public javax.swing.JLabel lblTituloErr;
     public javax.swing.JTextField txtBuscar;
     public javax.swing.JTextField txtDescripcion;
-    public javax.swing.JTextField txtEmpresa;
     public javax.swing.JTextField txtEspacios;
     public javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables

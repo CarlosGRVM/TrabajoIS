@@ -4,8 +4,14 @@
  */
 package modelo;
 
-import modelo.UsuarioDAO; // Importar la nueva clase DAO
-import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.nio.charset.StandardCharsets;
+
+
 
 public class Gestor {
     private UsuarioDAO usuarioDAO;
@@ -35,7 +41,43 @@ public class Gestor {
         return Codigo.getCodigoGenerado() != null && Codigo.getCodigoGenerado().equals(codigoIngresado);
     }
 
-    public boolean actualizarContrasena(String email, String nuevaContrasena) {
-        return usuarioDAO.actualizarContrasenaUsuario(email, nuevaContrasena);
+public boolean actualizarContrasena(String correo, String nuevaContrasena) {
+    String sql = "UPDATE usuario SET contrasena = ? WHERE correo = ?";
+String hash = encriptarSHA256(nuevaContrasena);  // <--- Encriptamos antes de guardar
+try (Connection con = ConexionSQL.conectar();
+     PreparedStatement ps = con.prepareStatement(sql)) {
+     
+    ps.setString(1, hash);  // <--- Guardamos el hash
+    ps.setString(2, correo);
+
+        int rows = ps.executeUpdate();
+        return rows > 0;
+    } catch (SQLException e) {
+        System.err.println("❌ Error al actualizar contraseña: " + e.getMessage());
+        return false;
     }
+}
+
+public static String encriptarSHA256(String input) {
+    try {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder();
+
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+
+        return hexString.toString();
+    } catch (NoSuchAlgorithmException e) {
+        System.err.println("Error al encriptar: " + e.getMessage());
+        return null;
+    }
+}
+
+  
+
+
 }

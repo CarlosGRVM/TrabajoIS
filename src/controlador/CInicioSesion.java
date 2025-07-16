@@ -41,6 +41,21 @@ public class CInicioSesion {
 
         vista.mostrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         vista.ocultar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        vista.olvide_contrsena.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        vista.olvide_contrsena.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                vista.dispose();
+                Recuperar recuperar = new Recuperar();
+                CRecuperar cRecuperar = new CRecuperar(recuperar);
+                cRecuperar.iniciar();
+
+                recuperar.setVisible(true);
+                recuperar.setLocationRelativeTo(null);
+            }
+        });
+
     }
 
     private void validarUsuario() {

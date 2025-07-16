@@ -1,26 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controlador;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.List;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import modelo.ModeloCandidato;
 import modelo.ModeloCandidatoBD;
 import vista.ListaCandidato;
 
-/**
- *
- * @author ubuntu
- */
 public class ControladorListaCandidato implements ActionListener {
 
-    private ListaCandidato vista;
-    private ModeloCandidatoBD modelo;
+    private final ListaCandidato vista;
+    private final ModeloCandidatoBD modelo;
+    private boolean modoEdicion = false;
+    private String noControlOriginal = "";
 
     public ControladorListaCandidato(ListaCandidato vista, ModeloCandidatoBD modelo) {
         this.vista = vista;
@@ -30,112 +23,148 @@ public class ControladorListaCandidato implements ActionListener {
         this.vista.btnMostrar.addActionListener(this);
         this.vista.btnModificar.addActionListener(this);
         this.vista.btnEliminar.addActionListener(this);
+        this.vista.btnRegresar.addActionListener(this);
 
-        cargarTabla(); // Cargar candidatos al iniciar
+        this.vista.txtBusqueda.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                buscarEnTiempoReal();
+            }
+        });
+
+        cargarTabla();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == vista.btnBuscar) {
-            buscar();
-        } else if (e.getSource() == vista.btnMostrar) {
+        Object src = e.getSource();
+        if (src == vista.btnBuscar) {
+            buscarPorNoControl();
+        } else if (src == vista.btnMostrar) {
             cargarTabla();
-        } else if (e.getSource() == vista.btnModificar) {
-            modificar();
-        } else if (e.getSource() == vista.btnEliminar) {
+        } else if (src == vista.btnModificar) {
+            if (!modoEdicion) {
+                habilitarEdicion();
+            } else {
+                guardarCambios();
+            }
+        } else if (src == vista.btnEliminar) {
             eliminar();
+        } else if (src == vista.btnRegresar) {
+            controlador.GestorVistas.regresar(vista);
         }
     }
-        public void cargarTabla() {
+
+    private void habilitarEdicion() {
+        int fila = vista.tblCandidato.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(vista, "Selecciona una fila para modificar.");
+            return;
+        }
+
+        noControlOriginal = vista.tblCandidato.getValueAt(fila, 0).toString();
+        vista.tblCandidato.setEnabled(true);
+        vista.btnModificar.setText("Guardar");
+        modoEdicion = true;
+    }
+
+    private void guardarCambios() {
+        int fila = vista.tblCandidato.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(vista, "Selecciona una fila para guardar los cambios.");
+            return;
+        }
+
+        String noControlNuevo = vista.tblCandidato.getValueAt(fila, 0).toString().trim();
+        String nombre = vista.tblCandidato.getValueAt(fila, 1).toString().trim();
+        String apePat = vista.tblCandidato.getValueAt(fila, 2).toString().trim();
+        String apeMat = vista.tblCandidato.getValueAt(fila, 3).toString().trim();
+        String telefono = vista.tblCandidato.getValueAt(fila, 4).toString().trim();
+        String correo = vista.tblCandidato.getValueAt(fila, 5).toString().trim();
+
+        if (noControlNuevo.isEmpty() || nombre.isEmpty() || apePat.isEmpty() || apeMat.isEmpty()
+                || telefono.isEmpty() || correo.isEmpty()) {
+            JOptionPane.showMessageDialog(vista, "Todos los campos deben estar llenos.");
+            return;
+        }
+
+        if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            JOptionPane.showMessageDialog(vista, "Correo inválido.");
+            return;
+        }
+
+        if (!telefono.matches("\\d{10,13}")) {
+            JOptionPane.showMessageDialog(vista, "Teléfono inválido. Debe tener entre 10 y 13 dígitos.");
+            return;
+        }
+
+        if (!noControlNuevo.equals(noControlOriginal) && modelo.existeCandidato(noControlNuevo)) {
+            JOptionPane.showMessageDialog(vista, "Ya existe un candidato con ese número de control.");
+            return;
+        }
+
+        ModeloCandidato c = new ModeloCandidato(noControlNuevo, nombre, apePat, apeMat, telefono, correo);
+        if (modelo.actualizar(c, noControlOriginal)) {
+            JOptionPane.showMessageDialog(vista, "✅ Candidato actualizado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(vista, "❌ Error al actualizar el candidato.");
+        }
+
+        cargarTabla();
+        vista.tblCandidato.clearSelection();
+        vista.btnModificar.setText("Modificar");
+        modoEdicion = false;
+    }
+
+    private void cargarTabla() {
         List<ModeloCandidato> lista = modelo.obtenerTodos();
         DefaultTableModel modeloTabla = (DefaultTableModel) vista.tblCandidato.getModel();
-        modeloTabla.setRowCount(0); // Limpiar
+        modeloTabla.setRowCount(0);
 
         for (ModeloCandidato c : lista) {
             modeloTabla.addRow(new Object[]{
-                c.getNumControl(),
-                c.getNombre(),
-                c.getApeP(),
-                c.getApeM(),
-                c.getTelefono(),
-                c.getCorreo()
+                c.getNumControl(), c.getNombre(), c.getApeP(), c.getApeM(), c.getTelefono(), c.getCorreo()
             });
         }
     }
-        public void modificar() {
-    int fila = vista.tblCandidato.getSelectedRow();
-    if (fila == -1) {
-        JOptionPane.showMessageDialog(vista, "Selecciona una fila a modificar.");
-        return;
-    }
 
-    // Obtener datos modificados
-    String noControl = vista.tblCandidato.getValueAt(fila, 0).toString();
-    String nombre = vista.tblCandidato.getValueAt(fila, 1).toString();
-    String apePat = vista.tblCandidato.getValueAt(fila, 2).toString();
-    String apeMat = vista.tblCandidato.getValueAt(fila, 3).toString();
-    String telefono = vista.tblCandidato.getValueAt(fila, 4).toString();
-    String correo = vista.tblCandidato.getValueAt(fila, 5).toString();
-
-
-
-    // Validaciones básicas
-    if (nombre.isEmpty() || apePat.isEmpty() || apeMat.isEmpty() || correo.isEmpty() || telefono.isEmpty()) {
-        JOptionPane.showMessageDialog(vista, "Todos los campos deben estar llenos.");
-        return;
-    }
-
-    if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-    JOptionPane.showMessageDialog(vista, "Correo inválido (usa un formato como usuario@dominio.com).");
-    return;
-}
-
-
-
-    if (!telefono.matches("\\d{10}")) {
-        JOptionPane.showMessageDialog(vista, "Teléfono debe tener 10 dígitos.");
-        return;
-    }
-
-    // Crear objeto candidato
-    ModeloCandidato candidato = new ModeloCandidato();
-    candidato.setNumControl(noControl);
-    candidato.setNombre(nombre);
-    candidato.setApeP(apePat);
-    candidato.setApeM(apeMat);
-    candidato.setTelefono(telefono);
-    candidato.setCorreo(correo);
-    
-
-    if (modelo.actualizar(candidato)) {
-        JOptionPane.showMessageDialog(vista, "Candidato actualizado correctamente.");
-        cargarTabla();
-    } else {
-        JOptionPane.showMessageDialog(vista, "Error al actualizar el candidato.");
-    }
-}
-
-        public void buscar() {
+    private void buscarPorNoControl() {
         String noControl = vista.txtBusqueda.getText().trim();
         ModeloCandidato c = modelo.buscarPorNoControl(noControl);
 
         DefaultTableModel modeloTabla = (DefaultTableModel) vista.tblCandidato.getModel();
-        modeloTabla.setRowCount(0); // Limpiar tabla
+        modeloTabla.setRowCount(0);
 
         if (c != null) {
             modeloTabla.addRow(new Object[]{
-                c.getNumControl(),
-                c.getNombre(),
-                c.getApeP(),
-                c.getApeM(),
-                c.getTelefono(),
-                c.getCorreo()
+                c.getNumControl(), c.getNombre(), c.getApeP(), c.getApeM(), c.getTelefono(), c.getCorreo()
             });
         } else {
             JOptionPane.showMessageDialog(vista, "Candidato no encontrado.");
         }
     }
-        public void eliminar() {
+
+    private void buscarEnTiempoReal() {
+        String texto = vista.txtBusqueda.getText().trim().toLowerCase();
+        List<ModeloCandidato> lista = modelo.listarTodos();
+        DefaultTableModel modelo = (DefaultTableModel) vista.tblCandidato.getModel();
+        modelo.setRowCount(0);
+
+        for (ModeloCandidato c : lista) {
+            if (c.getNumControl().toLowerCase().contains(texto)
+                    || c.getNombre().toLowerCase().contains(texto)
+                    || c.getApeP().toLowerCase().contains(texto)
+                    || c.getApeM().toLowerCase().contains(texto)
+                    || c.getCorreo().toLowerCase().contains(texto)
+                    || c.getTelefono().toLowerCase().contains(texto)) {
+                modelo.addRow(new Object[]{
+                    c.getNumControl(), c.getNombre(), c.getApeP(), c.getApeM(), c.getTelefono(), c.getCorreo()
+                });
+            }
+        }
+    }
+
+    private void eliminar() {
         int fila = vista.tblCandidato.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(vista, "Selecciona un candidato.");
@@ -143,7 +172,10 @@ public class ControladorListaCandidato implements ActionListener {
         }
 
         String noControl = vista.tblCandidato.getValueAt(fila, 0).toString();
-        int confirmacion = JOptionPane.showConfirmDialog(vista, "¿Eliminar candidato " + noControl + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        int confirmacion = JOptionPane.showConfirmDialog(
+                vista, "¿Eliminar candidato " + noControl + "?", "Confirmar", JOptionPane.YES_NO_OPTION
+        );
+
         if (confirmacion == JOptionPane.YES_OPTION) {
             if (modelo.eliminar(noControl)) {
                 cargarTabla();
@@ -153,6 +185,4 @@ public class ControladorListaCandidato implements ActionListener {
             }
         }
     }
-
-
 }

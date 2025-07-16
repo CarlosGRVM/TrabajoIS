@@ -173,7 +173,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblCorreoError" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="btnAnadir" min="-2" max="-2" attributes="0"/>
                       <Component id="btnDescartar" min="-2" max="-2" attributes="0"/>
@@ -305,6 +305,11 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/iconos/lupa.png"/>
+            </Property>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblRfcError">
           <Properties>
@@ -482,6 +487,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnAnadir">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/iconos/agregar-boton.png"/>
+            </Property>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
           <AuxValues>
@@ -490,6 +498,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnDescartar">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/iconos/circulo.png"/>
+            </Property>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
           <AuxValues>
@@ -498,7 +509,10 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnFiltro">
           <Properties>
-            <Property name="text" type="java.lang.String" value="RFC"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/iconos/filtrar.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="No. Lista"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -506,6 +520,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnOrden">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/iconos/ordenar.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Ascendentre"/>
           </Properties>
           <AuxValues>

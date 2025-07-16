@@ -1,43 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
 public class Docente {
-    private int id;
     private String noEmpleado;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
+    private String telefono;
     private String correo;
 
     public Docente() {
     }
 
-    public Docente(int id, String noEmpleado, String nombre, String apellidoPaterno, String apellidoMaterno, String correo) {
-        this.id = id;
+    public Docente(String noEmpleado, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correo) {
         this.noEmpleado = noEmpleado;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
+        this.telefono = telefono;
         this.correo = correo;
-    }
-
-    public Docente(String noEmpleado, String nombre, String apellidoPaterno, String apellidoMaterno, String correo) {
-        this.noEmpleado = noEmpleado;
-        this.nombre = nombre;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.correo = correo;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNoEmpleado() {
@@ -46,6 +26,10 @@ public class Docente {
 
     public void setNoEmpleado(String noEmpleado) {
         this.noEmpleado = noEmpleado;
+    }
+
+    public String getNumeroEmpleado() {
+        return noEmpleado;
     }
 
     public String getNombre() {
@@ -72,6 +56,14 @@ public class Docente {
         this.apellidoMaterno = apellidoMaterno;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     public String getCorreo() {
         return correo;
     }
@@ -80,22 +72,19 @@ public class Docente {
         this.correo = correo;
     }
 
+    public String getApellidos() {
+        return apellidoPaterno + " " + apellidoMaterno;
+    }
+
     @Override
     public String toString() {
         return "Docente{" +
-               "id=" + id +
-               ", noEmpleado='" + noEmpleado + '\'' +
+               "noEmpleado='" + noEmpleado + '\'' +
                ", nombre='" + nombre + '\'' +
                ", apellidoPaterno='" + apellidoPaterno + '\'' +
                ", apellidoMaterno='" + apellidoMaterno + '\'' +
+               ", telefono='" + telefono + '\'' +
                ", correo='" + correo + '\'' +
                '}';
     }
-    public String getNumeroEmpleado() {
-    return noEmpleado;
-}
-    public String getApellidos() {
-    return apellidoPaterno + " " + apellidoMaterno;
-}
-
 }

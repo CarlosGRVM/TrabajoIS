@@ -15,6 +15,7 @@ public class Empresa {
     private String direccion;
     private String telefono;
     private String correo;
+    private boolean activo;
     private Connection conexion;
 
     public Empresa(int id_empresa, String rfc, String nombre, String direccion, String telefono, String correo) {
@@ -86,6 +87,14 @@ public class Empresa {
 
     public void setConexion(Connection conexion) {
         this.conexion = conexion;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
     @Override
@@ -279,7 +288,7 @@ public class Empresa {
         List<Empresa> empresas = new ArrayList<>();
         try {
             asegurarConexion();
-            String sql = "SELECT id_empresa, rfc, nombre, direccion, telefono, correo FROM empresa";
+            String sql = "SELECT id_empresa, rfc, nombre, direccion, telefono, correo FROM empresa WHERE activo = TRUE";
             PreparedStatement stmt = conexion.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
@@ -373,6 +382,18 @@ public class Empresa {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error al actualizar empresa: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean desactivarEmpresa(int id) {
+        try (Connection conn = ConexionSQL.conectar()) {
+            String sql = "UPDATE empresa SET activo = FALSE WHERE id_empresa = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }

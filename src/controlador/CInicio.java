@@ -57,6 +57,30 @@ public class CInicio {
             }
         });
 
+        vista.lblProyectos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                vista.setVisible(false);
+                MenuProyectos menuVista = new MenuProyectos();
+                controlador.GestorVistas.registrarTransicion(vista, menuVista);  // ← registrar
+                new CCentroBanco(menuVista);
+                menuVista.setVisible(true);
+                menuVista.setLocationRelativeTo(null);
+            }
+        });
+
+        // Submenú Estudiante desde botón
+        vista.btnEstudianteMenu.addActionListener(e -> {
+            estudianteExpandido = !estudianteExpandido;
+            vista.panelSubEstudiante.setVisible(estudianteExpandido);
+        });
+
+// Submenú Docente desde botón
+        vista.btnDocenteMenu.addActionListener(e -> {
+            docenteExpandido = !docenteExpandido;
+            vista.panelSubDocente.setVisible(docenteExpandido);
+        });
+
         // Efecto hover para botones
         configurarHover(vista.btnNuevaLista);
         configurarHover(vista.btnEditarLista);
@@ -89,7 +113,7 @@ public class CInicio {
 
     private void alternarMenu() {
         menuExpandido = !menuExpandido;
-        vista.panelMenu.setPreferredSize(new Dimension(menuExpandido ? 250 : 60, vista.panelMenu.getHeight()));
+        vista.panelMenu.setPreferredSize(new Dimension(menuExpandido ? 362 : 60, vista.panelMenu.getHeight()));
         vista.panelMenu.revalidate();
     }
 
@@ -137,7 +161,7 @@ public class CInicio {
 
     private void abrirRegistrarDocente() {
         vista.setVisible(false);
-        FormularioDocente docente = new FormularioDocente();
+        docente docente = new docente();
         controlador.GestorVistas.registrarTransicion(vista, docente);  // ← registrar
         docente.setVisible(true);
         docente.setLocationRelativeTo(null);
@@ -145,7 +169,7 @@ public class CInicio {
 
     private void abrirEditarDocente() {
         vista.setVisible(false);
-        RegistroCandidato registro = new RegistroCandidato();
+        vistaeditar registro = new vistaeditar();
         controlador.GestorVistas.registrarTransicion(vista, registro);  // ← registrar
         registro.setVisible(true);
         registro.setLocationRelativeTo(null);
@@ -170,7 +194,7 @@ public class CInicio {
 
     private void abrirCentroDocente() {
         vista.setVisible(false);
-        FormularioDocente docente = new FormularioDocente();
+        docente docente = new docente();
         controlador.GestorVistas.registrarTransicion(vista, docente);  // ← registrar
         docente.setVisible(true);
         docente.setLocationRelativeTo(null);

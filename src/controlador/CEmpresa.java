@@ -186,9 +186,11 @@ public class CEmpresa implements ActionListener, KeyListener, MouseListener, Doc
             JOptionPane.showMessageDialog(vista, "No es posible eliminar esta empresa: tiene proyectos registrados");
             return;
         }
-        int confirmacion = JOptionPane.showOptionDialog(vista,
-                "¿Deseas eliminar esta empresa?",
-                "Confirmar eliminación",
+
+        int confirmacion = JOptionPane.showOptionDialog(
+                vista,
+                "¿Deseas ocultar esta empresa del sistema?",
+                "Confirmar ocultación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -197,11 +199,11 @@ public class CEmpresa implements ActionListener, KeyListener, MouseListener, Doc
         );
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-            if (empresas.eliminarEmpresa(idEmpresa)) {
-                JOptionPane.showMessageDialog(vista, "Empresa eliminada correctamente.");
+            if (empresas.desactivarEmpresa(idEmpresa)) {
+                JOptionPane.showMessageDialog(vista, "Empresa ocultada correctamente.");
                 mostrarEmpresas(vista.jTable1);
             } else {
-                JOptionPane.showMessageDialog(vista, "Error al eliminar empresa.");
+                JOptionPane.showMessageDialog(vista, "Error al ocultar empresa.");
             }
         }
     }
@@ -342,7 +344,7 @@ public class CEmpresa implements ActionListener, KeyListener, MouseListener, Doc
                 filtrarYOrdenar();
             }
         });
-        
+
         vista.lblRegresar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

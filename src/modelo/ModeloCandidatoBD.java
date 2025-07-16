@@ -70,7 +70,7 @@ public boolean insertar(ModeloCandidato c) {
 
     public ArrayList<ModeloCandidato> listarTodos() {
         ArrayList<ModeloCandidato> lista = new ArrayList<>();
-        String sql = "SELECT * FROM candidato";
+        String sql = "SELECT * FROM candidato WHERE estatus = 'activo'";
         try (Connection conn = ConexionSQL.conectar();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -122,29 +122,30 @@ public boolean insertar(ModeloCandidato c) {
     }
     public List<ModeloCandidato> obtenerTodos() {
     List<ModeloCandidato> lista = new ArrayList<>();
-    String sql = "SELECT * FROM candidato";
+    String sql = "SELECT * FROM candidato WHERE estatus = 'activo'";
 
     try (Connection conn = ConexionSQL.conectar();
-         Statement st = conn.createStatement();
-         ResultSet rs = st.executeQuery(sql)) {
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
 
         while (rs.next()) {
-            lista.add(new ModeloCandidato(
-                rs.getString("no_control"),
-                rs.getString("Nombre"),
-                rs.getString("Apellido_p"),
-                rs.getString("Apellido_m"),
-                rs.getString("Telefono"),
-                rs.getString("Correo")
-            ));
+            ModeloCandidato c = new ModeloCandidato();
+            c.setNumControl(rs.getString("no_control"));
+            c.setNombre(rs.getString("nombre"));
+            c.setApeP(rs.getString("apellido_p"));
+            c.setApeM(rs.getString("apellido_m"));
+            c.setTelefono(rs.getString("telefono"));
+            c.setCorreo(rs.getString("correo"));
+            lista.add(c);
         }
 
     } catch (SQLException e) {
-        System.out.println("❌ Error al listar: " + e.getMessage());
+        System.out.println("❌ Error al obtener candidatos: " + e.getMessage());
     }
 
     return lista;
 }
+
 public ModeloCandidato buscarPorNoControl(String noControl) {
     String sql = "SELECT * FROM candidato WHERE no_control = ?";
 
@@ -171,55 +172,56 @@ public ModeloCandidato buscarPorNoControl(String noControl) {
 
     return null;
 }
-public boolean actualizar(ModeloCandidato c) {
-    String sql = "UPDATE candidato SET Nombre = ?, Apellido_p = ?, Apellido_m = ?, Telefono = ?, Correo = ? WHERE no_control = ?";
+public boolean actualizar(ModeloCandidato c, String noControlOriginal) {
+    String sql = "UPDATE candidato SET no_control = ?, Nombre = ?, Apellido_p = ?, Apellido_m = ?, Telefono = ?, Correo = ? WHERE no_control = ?";
 
     try (Connection conn = ConexionSQL.conectar();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        // Mostrar los datos que se van a actualizar
-        System.out.println("➡️ Actualizando candidato con:");
-        System.out.println("Nombre: " + c.getNombre());
-        System.out.println("Apellido P: " + c.getApeP());
-        System.out.println("Apellido M: " + c.getApeM());
-        System.out.println("Teléfono: " + c.getTelefono());
-        System.out.println("Correo: " + c.getCorreo());
-        System.out.println("No Control: " + c.getNumControl());
+        ps.setString(1, c.getNumControl()); // Nuevo no_control
+        ps.setString(2, c.getNombre());
+        ps.setString(3, c.getApeP());
+        ps.setString(4, c.getApeM());
+        ps.setString(5, c.getTelefono());
+        ps.setString(6, c.getCorreo());
+        ps.setString(7, noControlOriginal); // Clave original en WHERE
 
-        // Asignar valores
-        ps.setString(1, c.getNombre());
-        ps.setString(2, c.getApeP());
-        ps.setString(3, c.getApeM());
-        ps.setString(4, c.getTelefono());
-        ps.setString(5, c.getCorreo());
-        ps.setString(6, c.getNumControl());
-
-        // Ejecutar y verificar filas modificadas
-        int filasAfectadas = ps.executeUpdate();
-        System.out.println("✅ Filas modificadas: " + filasAfectadas);
-
-        return filasAfectadas > 0;
+        int filas = ps.executeUpdate();
+        System.out.println("🔄 Filas actualizadas: " + filas);
+        return filas > 0;
 
     } catch (SQLException e) {
         System.out.println("❌ Error al actualizar candidato: " + e.getMessage());
         return false;
     }
 }
-
-public boolean eliminar(String noControl) {
-    String sql = "DELETE FROM candidato WHERE no_control = ?";
-
+public boolean existeCandidato(String noControl) {
+    String sql = "SELECT 1 FROM candidato WHERE no_control = ?";
     try (Connection conn = ConexionSQL.conectar();
          PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, noControl);
+        ResultSet rs = ps.executeQuery();
+        return rs.next(); // true si hay resultado
+    } catch (SQLException e) {
+        System.out.println("❌ Error al verificar existencia: " + e.getMessage());
+        return true; // por seguridad, asumimos que sí existe
+    }
+}
 
+
+
+public boolean eliminar(String noControl) {
+    String sql = "UPDATE candidato SET estatus = 'inactivo' WHERE no_control = ?";
+    try (Connection conn = ConexionSQL.conectar();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, noControl);
         return ps.executeUpdate() > 0;
-
     } catch (SQLException e) {
-        System.out.println("❌ Error al eliminar candidato: " + e.getMessage());
+        System.out.println("❌ Error en eliminación lógica: " + e.getMessage());
         return false;
     }
 }
+
 
 
 }
