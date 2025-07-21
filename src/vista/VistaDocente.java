@@ -8,30 +8,18 @@ package vista;
  *
  * @author david
  */
-import java.sql.*;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import modelo.ConexionSQL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import controlador.DocenteControlador; // Importa tu controlador
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 
-public class docente extends javax.swing.JFrame {
 
-    private DocenteControlador controller;
+public class VistaDocente extends javax.swing.JFrame {
+
+    
 
     /**
      * Creates new form docente
      */
-    public docente() {
+    public VistaDocente() {
         initComponents();
-        this.controller = new DocenteControlador(this);
-        controller.deshabilitarCamposFormulario();
+        
     }
 
     /**
@@ -58,9 +46,18 @@ public class docente extends javax.swing.JFrame {
         txtApellidoP = new javax.swing.JTextField();
         txtApellidoM = new javax.swing.JTextField();
         txtCorreo = new javax.swing.JTextField();
-        btnAnadir = new javax.swing.JButton();
         discardBtn = new javax.swing.JButton();
         BGUARDAR = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtTelefono = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        lblerrorempleado = new javax.swing.JLabel();
+        errornombre = new javax.swing.JLabel();
+        errorapellidop = new javax.swing.JLabel();
+        errorapellidom = new javax.swing.JLabel();
+        errortelefono = new javax.swing.JLabel();
+        errorcorreo = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -83,9 +80,9 @@ public class docente extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(35, 57, 143));
 
         botonregre.setBackground(new java.awt.Color(51, 51, 255));
-        botonregre.setForeground(new java.awt.Color(51, 51, 255));
-        botonregre.setIcon(new javax.swing.ImageIcon("D:\\alexv\\Downloads\\flecha3.png")); // NOI18N
+        botonregre.setForeground(new java.awt.Color(255, 255, 255));
         botonregre.setText("Atras");
+        botonregre.setContentAreaFilled(false);
         botonregre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonregreActionPerformed(evt);
@@ -97,8 +94,8 @@ public class docente extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(botonregre, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 721, Short.MAX_VALUE))
+                .addComponent(botonregre, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 680, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,20 +120,12 @@ public class docente extends javax.swing.JFrame {
         getContentPane().add(lb_ApMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 190, -1, -1));
 
         lb_Correo.setText("Correo");
-        getContentPane().add(lb_Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 230, 40, -1));
+        getContentPane().add(lb_Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 40, -1));
         getContentPane().add(txtEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 430, -1));
         getContentPane().add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 430, -1));
         getContentPane().add(txtApellidoP, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 430, -1));
         getContentPane().add(txtApellidoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 430, -1));
-        getContentPane().add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 230, 430, -1));
-
-        btnAnadir.setText("Añadir");
-        btnAnadir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnadirActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnAnadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, -1, -1));
+        getContentPane().add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 270, 430, -1));
 
         discardBtn.setText("Descartar");
         discardBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -144,37 +133,75 @@ public class docente extends javax.swing.JFrame {
                 discardBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(discardBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 270, -1, -1));
+        getContentPane().add(discardBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 320, -1, -1));
 
         BGUARDAR.setBackground(new java.awt.Color(0, 176, 80));
+        BGUARDAR.setForeground(new java.awt.Color(255, 255, 255));
         BGUARDAR.setText("Guardar");
+        BGUARDAR.setContentAreaFilled(false);
+        BGUARDAR.setOpaque(true);
         BGUARDAR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BGUARDARActionPerformed(evt);
             }
         });
-        getContentPane().add(BGUARDAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, -1, -1));
+        getContentPane().add(BGUARDAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 320, -1, -1));
+
+        jLabel2.setText("Telefono");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, -1, -1));
+        getContentPane().add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 230, 430, -1));
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 750, 170));
+
+        lblerrorempleado.setForeground(new java.awt.Color(204, 0, 0));
+        lblerrorempleado.setText("jLabel3");
+        getContentPane().add(lblerrorempleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, -1, -1));
+
+        errornombre.setForeground(new java.awt.Color(204, 0, 0));
+        errornombre.setText("jLabel4");
+        getContentPane().add(errornombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, -1, -1));
+
+        errorapellidop.setForeground(new java.awt.Color(204, 0, 0));
+        errorapellidop.setText("jLabel5");
+        getContentPane().add(errorapellidop, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, -1, -1));
+
+        errorapellidom.setForeground(new java.awt.Color(204, 0, 0));
+        errorapellidom.setText("jLabel6");
+        getContentPane().add(errorapellidom, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, -1, -1));
+
+        errortelefono.setForeground(new java.awt.Color(204, 0, 0));
+        errortelefono.setText("jLabel7");
+        getContentPane().add(errortelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, -1, -1));
+
+        errorcorreo.setForeground(new java.awt.Color(204, 0, 0));
+        errorcorreo.setText("jLabel8");
+        getContentPane().add(errorcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 290, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonregreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonregreActionPerformed
-        controller.regresarVentana();
 
     }//GEN-LAST:event_botonregreActionPerformed
 
     private void BGUARDARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BGUARDARActionPerformed
-        controller.guardarDocente();
     }//GEN-LAST:event_BGUARDARActionPerformed
 
-    private void btnAnadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirActionPerformed
-        controller.habilitarCamposFormulario();
-        controller.limpiarCamposFormulario();
-    }//GEN-LAST:event_btnAnadirActionPerformed
-
     private void discardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardBtnActionPerformed
-        controller.limpiarCamposFormulario();
-        controller.deshabilitarCamposFormulario();
+
     }//GEN-LAST:event_discardBtnActionPerformed
 
    
@@ -184,53 +211,33 @@ public class docente extends javax.swing.JFrame {
     
 
 
-    public JTextField getTxtEmpleado() {
-        return txtEmpleado;
-    }
-
-    public JTextField getTxtNombre() {
-        return txtNombre;
-    }
-
-    public JTextField getTxtApellidoP() {
-        return txtApellidoP;
-    }
-
-    public JTextField getTxtApellidoM() {
-        return txtApellidoM;
-    }
-
-    public JTextField getTxtCorreo() {
-        return txtCorreo;
-    }
-
-    public JButton getBGUARDAR() {
-        return BGUARDAR;
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BGUARDAR;
-    private javax.swing.JButton botonregre;
-    private javax.swing.JButton btnAnadir;
-    private javax.swing.JButton discardBtn;
+    public javax.swing.JButton BGUARDAR;
+    public javax.swing.JButton botonregre;
+    public javax.swing.JButton discardBtn;
+    public javax.swing.JLabel errorapellidom;
+    public javax.swing.JLabel errorapellidop;
+    public javax.swing.JLabel errorcorreo;
+    public javax.swing.JLabel errornombre;
+    public javax.swing.JLabel errortelefono;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    public javax.swing.JTable jTable2;
     private javax.swing.JLabel lb_ApMat;
     private javax.swing.JLabel lb_ApPat;
     private javax.swing.JLabel lb_Correo;
     private javax.swing.JLabel lb_empleado;
     private javax.swing.JLabel lb_nombre;
-    private javax.swing.JTextField txtApellidoM;
-    private javax.swing.JTextField txtApellidoP;
-    private javax.swing.JTextField txtCorreo;
-    private javax.swing.JTextField txtEmpleado;
-    private javax.swing.JTextField txtNombre;
+    public javax.swing.JLabel lblerrorempleado;
+    public javax.swing.JTextField txtApellidoM;
+    public javax.swing.JTextField txtApellidoP;
+    public javax.swing.JTextField txtCorreo;
+    public javax.swing.JTextField txtEmpleado;
+    public javax.swing.JTextField txtNombre;
+    public javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

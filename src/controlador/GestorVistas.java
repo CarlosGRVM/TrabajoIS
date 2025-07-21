@@ -27,8 +27,7 @@ public class GestorVistas {
             actual.dispose(); // Cierra la vista actual
             anterior.setVisible(true); // Muestra la vista anterior
         } else {
-            System.out.println("⚠ No se encontró una vista anterior para: " + actual.getClass().getSimpleName());
-            JOptionPane.showMessageDialog(null, "No hay una vista anterior registrada para regresar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al regresar a la vista");
         }
     }
 }

@@ -15,6 +15,9 @@ public class Inicio extends javax.swing.JFrame {
      */
     public Inicio() {
         initComponents();
+        rsscalelabel.RSScaleLabel.setScaleLabel(jLabel6, "src/iconos/Logo-TecNM.png");
+        rsscalelabel.RSScaleLabel.setScaleLabel(jLabel1, "src/iconos/Logo3d TecNM.png");
+        
     }
 
     /**
@@ -35,7 +38,6 @@ public class Inicio extends javax.swing.JFrame {
         btnEditarLista = new javax.swing.JButton();
         panelSubDocente = new javax.swing.JPanel();
         btnRegistrarDocente = new javax.swing.JButton();
-        btnEditarDocente = new javax.swing.JButton();
         lblEstudiante = new javax.swing.JLabel();
         lblDocente = new javax.swing.JLabel();
         lblProyectos = new javax.swing.JLabel();
@@ -47,10 +49,12 @@ public class Inicio extends javax.swing.JFrame {
         btnCentroEstudiante = new javax.swing.JButton();
         btnCentroBanco = new javax.swing.JButton();
         btnCentroDocente = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(226, 226, 226));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelMenu.setBackground(new java.awt.Color(0, 32, 96));
 
@@ -77,7 +81,7 @@ public class Inicio extends javax.swing.JFrame {
         btnBancoProyecto.setBorder(null);
         btnBancoProyecto.setContentAreaFilled(false);
 
-        btnSalir.setBackground(new java.awt.Color(255, 47, 47));
+        btnSalir.setBackground(new java.awt.Color(176, 0, 0));
         btnSalir.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setText("Salir");
@@ -87,7 +91,7 @@ public class Inicio extends javax.swing.JFrame {
 
         panelSubEstudiante.setBackground(new java.awt.Color(0, 32, 96));
 
-        btnNuevaLista.setBackground(new java.awt.Color(0, 55, 164));
+        btnNuevaLista.setBackground(new java.awt.Color(0, 38, 84));
         btnNuevaLista.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         btnNuevaLista.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevaLista.setText("Nueva lista");
@@ -95,7 +99,7 @@ public class Inicio extends javax.swing.JFrame {
         btnNuevaLista.setContentAreaFilled(false);
         btnNuevaLista.setOpaque(true);
 
-        btnEditarLista.setBackground(new java.awt.Color(0, 55, 164));
+        btnEditarLista.setBackground(new java.awt.Color(0, 38, 84));
         btnEditarLista.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         btnEditarLista.setForeground(new java.awt.Color(255, 255, 255));
         btnEditarLista.setText("Editar lista");
@@ -110,7 +114,7 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(panelSubEstudianteLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelSubEstudianteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNuevaLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnNuevaLista, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                     .addComponent(btnEditarLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -121,12 +125,12 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(btnNuevaLista, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEditarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         panelSubDocente.setBackground(new java.awt.Color(0, 32, 96));
 
-        btnRegistrarDocente.setBackground(new java.awt.Color(0, 55, 164));
+        btnRegistrarDocente.setBackground(new java.awt.Color(0, 38, 84));
         btnRegistrarDocente.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         btnRegistrarDocente.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrarDocente.setText("Registrar");
@@ -134,23 +138,13 @@ public class Inicio extends javax.swing.JFrame {
         btnRegistrarDocente.setContentAreaFilled(false);
         btnRegistrarDocente.setOpaque(true);
 
-        btnEditarDocente.setBackground(new java.awt.Color(0, 55, 164));
-        btnEditarDocente.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        btnEditarDocente.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditarDocente.setText("Editar");
-        btnEditarDocente.setBorder(null);
-        btnEditarDocente.setContentAreaFilled(false);
-        btnEditarDocente.setOpaque(true);
-
         javax.swing.GroupLayout panelSubDocenteLayout = new javax.swing.GroupLayout(panelSubDocente);
         panelSubDocente.setLayout(panelSubDocenteLayout);
         panelSubDocenteLayout.setHorizontalGroup(
             panelSubDocenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSubDocenteLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelSubDocenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRegistrarDocente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEditarDocente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnRegistrarDocente, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelSubDocenteLayout.setVerticalGroup(
@@ -158,9 +152,7 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(panelSubDocenteLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnRegistrarDocente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEditarDocente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         lblEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/birrete.png"))); // NOI18N
@@ -196,7 +188,7 @@ public class Inicio extends javax.swing.JFrame {
                             .addComponent(btnEstudianteMenu, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(lblMenu))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         panelMenuLayout.setVerticalGroup(
             panelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,7 +211,7 @@ public class Inicio extends javax.swing.JFrame {
                 .addGroup(panelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnBancoProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblProyectos))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
                 .addGroup(panelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMenuLayout.createSequentialGroup()
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -229,14 +221,18 @@ public class Inicio extends javax.swing.JFrame {
                         .addGap(15, 15, 15))))
         );
 
+        jPanel1.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 700));
+
         jLabel6.setText("jLabel6");
-        jLabel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(386, 0, 220, 90));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/usuarioEditar.png"))); // NOI18N
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(956, 6, -1, -1));
 
         lblBienvenida.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         lblBienvenida.setForeground(new java.awt.Color(0, 0, 0));
         lblBienvenida.setText("Bienvenido UsuarioPrueba");
+        jPanel1.add(lblBienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(1006, 6, 210, 32));
 
         btnCentroEstudiante.setBackground(new java.awt.Color(0, 32, 96));
         btnCentroEstudiante.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
@@ -245,6 +241,7 @@ public class Inicio extends javax.swing.JFrame {
         btnCentroEstudiante.setBorder(null);
         btnCentroEstudiante.setContentAreaFilled(false);
         btnCentroEstudiante.setOpaque(true);
+        jPanel1.add(btnCentroEstudiante, new org.netbeans.lib.awtextra.AbsoluteConstraints(386, 174, 400, 100));
 
         btnCentroBanco.setBackground(new java.awt.Color(0, 32, 96));
         btnCentroBanco.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
@@ -253,6 +250,7 @@ public class Inicio extends javax.swing.JFrame {
         btnCentroBanco.setBorder(null);
         btnCentroBanco.setContentAreaFilled(false);
         btnCentroBanco.setOpaque(true);
+        jPanel1.add(btnCentroBanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(386, 292, 400, 100));
 
         btnCentroDocente.setBackground(new java.awt.Color(0, 32, 96));
         btnCentroDocente.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
@@ -261,53 +259,8 @@ public class Inicio extends javax.swing.JFrame {
         btnCentroDocente.setBorder(null);
         btnCentroDocente.setContentAreaFilled(false);
         btnCentroDocente.setOpaque(true);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(panelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblBienvenida, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCentroBanco, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnCentroEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCentroDocente, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 48, Short.MAX_VALUE))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lblBienvenida, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(124, 124, 124)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCentroDocente, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCentroEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCentroBanco, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(panelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        jPanel1.add(btnCentroDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 174, 400, 100));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, 560, 490));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -338,12 +291,12 @@ public class Inicio extends javax.swing.JFrame {
     public javax.swing.JButton btnCentroDocente;
     public javax.swing.JButton btnCentroEstudiante;
     public javax.swing.JButton btnDocenteMenu;
-    public javax.swing.JButton btnEditarDocente;
     public javax.swing.JButton btnEditarLista;
     public javax.swing.JButton btnEstudianteMenu;
     public javax.swing.JButton btnNuevaLista;
     public javax.swing.JButton btnRegistrarDocente;
     public javax.swing.JButton btnSalir;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;

@@ -5,6 +5,8 @@ import vista.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class CInicio {
 
@@ -15,7 +17,6 @@ public class CInicio {
 
     public CInicio(Inicio vista, String nombreUsuario) {
         this.vista = vista;
-
         inicializarVista(nombreUsuario);
         agregarEventos();
     }
@@ -31,7 +32,6 @@ public class CInicio {
     }
 
     private void agregarEventos() {
-        // Menu principal (icono hamburguesa)
         vista.lblMenu.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -39,7 +39,6 @@ public class CInicio {
             }
         });
 
-        // Submenú Estudiante
         vista.lblEstudiante.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -48,7 +47,6 @@ public class CInicio {
             }
         });
 
-        // Submenú Docente
         vista.lblDocente.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -62,36 +60,23 @@ public class CInicio {
             public void mouseClicked(MouseEvent e) {
                 vista.setVisible(false);
                 MenuProyectos menuVista = new MenuProyectos();
-                controlador.GestorVistas.registrarTransicion(vista, menuVista);  // ← registrar
+                controlador.GestorVistas.registrarTransicion(vista, menuVista);
                 new CCentroBanco(menuVista);
                 menuVista.setVisible(true);
                 menuVista.setLocationRelativeTo(null);
             }
         });
 
-        // Submenú Estudiante desde botón
         vista.btnEstudianteMenu.addActionListener(e -> {
             estudianteExpandido = !estudianteExpandido;
             vista.panelSubEstudiante.setVisible(estudianteExpandido);
         });
 
-// Submenú Docente desde botón
         vista.btnDocenteMenu.addActionListener(e -> {
             docenteExpandido = !docenteExpandido;
             vista.panelSubDocente.setVisible(docenteExpandido);
         });
 
-        // Efecto hover para botones
-        configurarHover(vista.btnNuevaLista);
-        configurarHover(vista.btnEditarLista);
-        configurarHover(vista.btnRegistrarDocente);
-        configurarHover(vista.btnEditarDocente);
-        configurarHover(vista.btnBancoProyecto);
-        configurarHover(vista.btnCentroEstudiante);
-        configurarHover(vista.btnCentroDocente);
-        configurarHover(vista.btnCentroBanco);
-
-        // Cerrar sesión
         vista.btnSalir.addActionListener(e -> cerrarSesion());
         vista.lblCerrarSesion.addMouseListener(new MouseAdapter() {
             @Override
@@ -100,11 +85,42 @@ public class CInicio {
             }
         });
 
-        // Navegación a otras vistas
+        // Colores para la animación
+        Color azulOscuro = new Color(0, 38, 84);
+        Color azulClaro = new Color(51, 102, 204);
+        Color rojoOscuro = new Color(176, 0, 0);
+        Color rojoClaro = new Color(255, 47, 47);
+        Color azulTono = new Color(0, 32, 96);
+
+        // Aplicar animación a todos los botones
+        List<JButton> botones = Arrays.asList(
+                vista.btnNuevaLista,
+                vista.btnEditarLista,
+                vista.btnRegistrarDocente,
+                vista.btnCentroEstudiante,
+                vista.btnCentroDocente,
+                vista.btnCentroBanco
+        );
+
+        List<JButton> menuBotones = Arrays.asList(
+                vista.btnEstudianteMenu,
+                vista.btnDocenteMenu,
+                vista.btnBancoProyecto);
+
+        for (JButton boton : botones) {
+            aplicarTransicionHover(boton, azulOscuro, azulClaro, 10, 15);
+        }
+
+        for (JButton menuBoton : menuBotones) {
+            aplicarTransicionHover(menuBoton, azulTono, azulClaro, 10, 15);
+        }
+
+        aplicarTransicionHover(vista.btnSalir, rojoOscuro, rojoClaro, 10, 15);
+
+        // Menú lateral con transición
         vista.btnNuevaLista.addActionListener(e -> abrirNuevaLista());
         vista.btnEditarLista.addActionListener(e -> abrirEditarLista());
         vista.btnRegistrarDocente.addActionListener(e -> abrirRegistrarDocente());
-        vista.btnEditarDocente.addActionListener(e -> abrirEditarDocente());
         vista.btnBancoProyecto.addActionListener(e -> abrirBancoProyecto());
         vista.btnCentroEstudiante.addActionListener(e -> abrirCentroEstudiante());
         vista.btnCentroDocente.addActionListener(e -> abrirCentroDocente());
@@ -112,24 +128,86 @@ public class CInicio {
     }
 
     private void alternarMenu() {
-        menuExpandido = !menuExpandido;
-        vista.panelMenu.setPreferredSize(new Dimension(menuExpandido ? 362 : 60, vista.panelMenu.getHeight()));
-        vista.panelMenu.revalidate();
+        int anchoInicial = vista.panelMenu.getWidth();
+        int anchoFinal = menuExpandido ? 60 : 368;
+        int pasos = 15;
+        int delayMs = 10;
+
+        Timer timer = new Timer(delayMs, null);
+        timer.addActionListener(new ActionListener() {
+            int pasoActual = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                float ratio = (float) pasoActual / pasos;
+                int nuevoAncho = (int) (anchoInicial + ratio * (anchoFinal - anchoInicial));
+                vista.panelMenu.setPreferredSize(new Dimension(nuevoAncho, vista.panelMenu.getHeight()));
+                vista.panelMenu.revalidate();
+                pasoActual++;
+                if (pasoActual > pasos) {
+                    timer.stop();
+                    menuExpandido = !menuExpandido;
+                }
+            }
+        });
+        timer.start();
     }
 
-    private void configurarHover(JButton boton) {
-        Color colorOriginal = boton.getBackground();
-        Color colorHover = new Color(0, 51, 204); // azul más claro al pasar el mouse
+    private void aplicarTransicionHover(JButton boton, Color colorInicial, Color colorFinal, int pasos, int delayMs) {
+        final Timer[] timerEntrada = new Timer[1];
+        final Timer[] timerSalida = new Timer[1];
 
         boton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                boton.setBackground(colorHover);
+                if (timerSalida[0] != null && timerSalida[0].isRunning()) {
+                    timerSalida[0].stop();
+                }
+                timerEntrada[0] = new Timer(delayMs, null);
+                timerEntrada[0].addActionListener(new ActionListener() {
+                    int paso = 0;
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (paso <= pasos) {
+                            float ratio = (float) paso / pasos;
+                            int r = (int) (colorInicial.getRed() + ratio * (colorFinal.getRed() - colorInicial.getRed()));
+                            int g = (int) (colorInicial.getGreen() + ratio * (colorFinal.getGreen() - colorInicial.getGreen()));
+                            int b = (int) (colorInicial.getBlue() + ratio * (colorFinal.getBlue() - colorInicial.getBlue()));
+                            boton.setBackground(new Color(r, g, b));
+                            paso++;
+                        } else {
+                            timerEntrada[0].stop();
+                        }
+                    }
+                });
+                timerEntrada[0].start();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                boton.setBackground(colorOriginal);
+                if (timerEntrada[0] != null && timerEntrada[0].isRunning()) {
+                    timerEntrada[0].stop();
+                }
+                timerSalida[0] = new Timer(delayMs, null);
+                timerSalida[0].addActionListener(new ActionListener() {
+                    int paso = 0;
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (paso <= pasos) {
+                            float ratio = (float) paso / pasos;
+                            int r = (int) (colorFinal.getRed() + ratio * (colorInicial.getRed() - colorFinal.getRed()));
+                            int g = (int) (colorFinal.getGreen() + ratio * (colorInicial.getGreen() - colorFinal.getGreen()));
+                            int b = (int) (colorFinal.getBlue() + ratio * (colorInicial.getBlue() - colorFinal.getBlue()));
+                            boton.setBackground(new Color(r, g, b));
+                            paso++;
+                        } else {
+                            timerSalida[0].stop();
+                        }
+                    }
+                });
+                timerSalida[0].start();
             }
         });
     }
@@ -137,16 +215,16 @@ public class CInicio {
     private void cerrarSesion() {
         vista.setVisible(false);
         inicioSesion login = new inicioSesion();
-        new CInicioSesion(login); // <- Asignas controlador al login
+        new CInicioSesion(login);
         login.setVisible(true);
         login.setLocationRelativeTo(null);
     }
 
-    // Métodos para abrir vistas
     private void abrirNuevaLista() {
         vista.setVisible(false);
         RegistroCandidato registro = new RegistroCandidato();
-        controlador.GestorVistas.registrarTransicion(vista, registro);  // ← registrar
+        controlador.GestorVistas.registrarTransicion(vista, registro);
+
         registro.setVisible(true);
         registro.setLocationRelativeTo(null);
     }
@@ -154,59 +232,57 @@ public class CInicio {
     private void abrirEditarLista() {
         vista.setVisible(false);
         ListaCandidato consultar = new ListaCandidato();
-        controlador.GestorVistas.registrarTransicion(vista, consultar);  // ← registrar
+        controlador.GestorVistas.registrarTransicion(vista, consultar);
         consultar.setVisible(true);
         consultar.setLocationRelativeTo(null);
     }
 
     private void abrirRegistrarDocente() {
         vista.setVisible(false);
-        docente docente = new docente();
-        controlador.GestorVistas.registrarTransicion(vista, docente);  // ← registrar
-        docente.setVisible(true);
-        docente.setLocationRelativeTo(null);
-    }
-
-    private void abrirEditarDocente() {
-        vista.setVisible(false);
-        vistaeditar registro = new vistaeditar();
-        controlador.GestorVistas.registrarTransicion(vista, registro);  // ← registrar
-        registro.setVisible(true);
-        registro.setLocationRelativeTo(null);
+        Docente docente = new Docente();
+        VistaDocente vistaDocente = new VistaDocente();
+        controlador.GestorVistas.registrarTransicion(vista, vistaDocente);
+        new Controladordocente(docente, vistaDocente); // ✅ Aquí se le asigna el controlador
+        vistaDocente.setVisible(true);
+        vistaDocente.setLocationRelativeTo(null);
     }
 
     private void abrirBancoProyecto() {
         vista.setVisible(false);
         MenuProyectos menuVista = new MenuProyectos();
-        controlador.GestorVistas.registrarTransicion(vista, menuVista);  // ← registrar
+        controlador.GestorVistas.registrarTransicion(vista, menuVista);
         new CCentroBanco(menuVista);
         menuVista.setVisible(true);
         menuVista.setLocationRelativeTo(null);
+
     }
 
     private void abrirCentroEstudiante() {
         vista.setVisible(false);
-        RegistroCandidato registro = new RegistroCandidato();
-        controlador.GestorVistas.registrarTransicion(vista, registro);  // ← registrar
-        registro.setVisible(true);
-        registro.setLocationRelativeTo(null);
+        RegistroCandidato vistaCandidato = new RegistroCandidato();
+        controlador.GestorVistas.registrarTransicion(vista, vistaCandidato);
+        new CandidatoControlador(vistaCandidato);
+        vistaCandidato.setVisible(true);
+        vistaCandidato.setLocationRelativeTo(null);
     }
 
     private void abrirCentroDocente() {
         vista.setVisible(false);
-        docente docente = new docente();
-        controlador.GestorVistas.registrarTransicion(vista, docente);  // ← registrar
-        docente.setVisible(true);
-        docente.setLocationRelativeTo(null);
+        Docente docente = new Docente();
+        VistaDocente vistaDocente = new VistaDocente();
+        controlador.GestorVistas.registrarTransicion(vista, vistaDocente);
+        new Controladordocente(docente, vistaDocente);
+        vistaDocente.setVisible(true);
+        vistaDocente.setLocationRelativeTo(null);
     }
 
     private void abrirCentroBanco() {
         vista.setVisible(false);
         MenuProyectos menuVista = new MenuProyectos();
-        controlador.GestorVistas.registrarTransicion(vista, menuVista);  // ← registrar
+        controlador.GestorVistas.registrarTransicion(vista, menuVista);
         new CCentroBanco(menuVista);
         menuVista.setVisible(true);
         menuVista.setLocationRelativeTo(null);
-    }
 
+    }
 }

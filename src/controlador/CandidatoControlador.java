@@ -23,11 +23,13 @@ import vista.RegistroCandidato;
 public class CandidatoControlador implements ActionListener {
 
     private RegistroCandidato vista;
+   
     private ModeloCandidatoBD dao;
     private boolean ordenAscendente = true;
 
     public CandidatoControlador(RegistroCandidato vista) {
         this.vista = vista;
+        
         this.dao = new ModeloCandidatoBD();
 
         this.vista.setVisible(true);

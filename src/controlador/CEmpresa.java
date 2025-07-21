@@ -432,10 +432,6 @@ public class CEmpresa implements ActionListener, KeyListener, MouseListener, Doc
 
     }
 
-    class GestorVistas {
-
-        public GestorVistas() {
-        }
-    }
+    
 
 }

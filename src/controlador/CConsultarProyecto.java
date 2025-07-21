@@ -27,9 +27,12 @@ public class CConsultarProyecto {
         this.vista = vista;
         this.modeloProyecto = new Proyecto();
         inicializar();
+        vista.btnGuardar.setEnabled(false);
+
     }
 
     private void inicializar() {
+
         vista.lblErrorEmpresa.setVisible(false);
 
         // Configurar ComboBox
@@ -51,15 +54,23 @@ public class CConsultarProyecto {
         // Detectar selección
         vista.cboEmpresa.addActionListener(e -> buscarEmpresa());
 
-        // Buscar texto en proyectos
         vista.txtBuscarProyecto.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { filtrarProyectos(); }
-            public void removeUpdate(DocumentEvent e) { filtrarProyectos(); }
-            public void changedUpdate(DocumentEvent e) { filtrarProyectos(); }
+            public void insertUpdate(DocumentEvent e) {
+                filtrarYOrdenar();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                filtrarYOrdenar();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                filtrarYOrdenar();
+            }
         });
 
         vista.btnFiltro.addActionListener(e -> cambiarFiltro());
         vista.btnOrdenar.addActionListener(e -> cambiarOrden());
+        vista.btnGuardar.addActionListener(e -> guardarCambios());
 
         vista.addWindowListener(new WindowAdapter() {
             @Override
@@ -71,11 +82,19 @@ public class CConsultarProyecto {
         vista.lblRegresar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                confirmarSalida();
                 controlador.GestorVistas.regresar(vista);
             }
         });
 
-        vista.jTable1.getModel().addTableModelListener(e -> hayCambiosSinGuardar = true);
+        vista.jTable1.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                hayCambiosSinGuardar = true;
+                vista.btnGuardar.setEnabled(true); // Habilita el botón si hay cambios
+            }
+        });
+
     }
 
     private void buscarEmpresa() {
@@ -129,17 +148,21 @@ public class CConsultarProyecto {
 
         for (Proyecto p : lista) {
             modelo.addRow(new Object[]{
-                    p.getId_proyecto(),
-                    p.getTitulo(),
-                    p.getDescripcion(),
-                    p.getEspacios(),
-                    p.getDisponible()
+                p.getId_proyecto(),
+                p.getTitulo(),
+                p.getDescripcion(),
+                p.getEspacios(),
+                p.getDisponible()
             });
         }
 
         vista.jTable1.setModel(modelo);
         vista.lblContador.setText("Proyectos registrados: " + lista.size());
-        modelo.addTableModelListener(e -> hayCambiosSinGuardar = true);
+        modelo.addTableModelListener(e -> {
+            hayCambiosSinGuardar = true;
+            vista.btnGuardar.setEnabled(true); // ✔ Habilitar botón
+        });
+
     }
 
     private void filtrarProyectos() {
@@ -161,32 +184,36 @@ public class CConsultarProyecto {
     }
 
     private void cambiarFiltro() {
-        String actual = vista.btnFiltro.getText();
-        switch (actual) {
-            case "Empresa" -> {
-                campoOrden = "id_empresa";
-                vista.btnFiltro.setText("Título");
-            }
-            case "Título" -> {
-                campoOrden = "titulo";
-                vista.btnFiltro.setText("Espacios");
-            }
-            case "Espacios" -> {
-                campoOrden = "espacios";
-                vista.btnFiltro.setText("Empresa");
-            }
-        }
-        if (empresaSeleccionada != null) {
-            cargarProyectosDeEmpresa();
-        }
+        String[] categorias = {"No. Lista", "Empresa", "Título", "Descripción", "Espacios"};
+        String actual = vista.btnFiltro.getText();  // Texto actual del botón
+        int index = java.util.Arrays.asList(categorias).indexOf(actual);
+        int siguiente = (index + 1) % categorias.length;
+
+        vista.btnFiltro.setText(categorias[siguiente]);
+
+        // Mapear al campo de base de datos
+        campoOrden = switch (categorias[siguiente]) {
+            case "No. Lista" ->
+                "id_proyecto";
+            case "Empresa" ->
+                "id_empresa";
+            case "Título" ->
+                "titulo";
+            case "Descripción" ->
+                "descripcion";
+            case "Espacios" ->
+                "espacios";
+            default ->
+                "id_proyecto";
+        };
+
+        filtrarYOrdenar(); // Mostrar datos actualizados
     }
 
     private void cambiarOrden() {
         ordenAscendente = !ordenAscendente;
         vista.btnOrdenar.setText(ordenAscendente ? "Ascendente" : "Descendente");
-        if (empresaSeleccionada != null) {
-            cargarProyectosDeEmpresa();
-        }
+        filtrarYOrdenar(); // Llama a este en lugar de cargarProyectosDeEmpresa()
     }
 
     public void guardarCambios() {
@@ -212,6 +239,8 @@ public class CConsultarProyecto {
 
         hayCambiosSinGuardar = false;
         JOptionPane.showMessageDialog(vista, "Cambios guardados correctamente.");
+        vista.btnGuardar.setEnabled(false); // ✔ Deshabilitar botón
+
     }
 
     private void confirmarSalida() {
@@ -233,4 +262,48 @@ public class CConsultarProyecto {
 
         vista.dispose();
     }
+
+    private void filtrarYOrdenar() {
+        String texto = vista.txtBuscarProyecto.getText().trim().toLowerCase();
+
+        List<Proyecto> filtrados = proyectosActuales.stream()
+                .filter(p -> {
+                    String titulo = p.getTitulo() != null ? p.getTitulo().toLowerCase() : "";
+                    String descripcion = p.getDescripcion() != null ? p.getDescripcion().toLowerCase() : "";
+                    String nombreEmpresa = (empresaSeleccionada != null && empresaSeleccionada.getNombre() != null)
+                            ? empresaSeleccionada.getNombre().toLowerCase()
+                            : "";
+                    return titulo.contains(texto) || descripcion.contains(texto) || nombreEmpresa.contains(texto);
+                })
+                .toList();
+
+        actualizarTabla(filtrados);
+    }
+
+    private void mostrarProyectosFiltrados(List<Proyecto> lista) {
+        String[] columnas = {"No. Lista", "Empresa", "Título", "Descripción", "Espacios", "Disponible"};
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+        for (Proyecto p : lista) {
+            String nombreEmpresa = "N/D";
+            if (p.getEmpresas() != null && p.getEmpresas().length > 0 && p.getEmpresas()[0] != null) {
+                nombreEmpresa = p.getEmpresas()[0].getNombre() != null
+                        ? p.getEmpresas()[0].getNombre()
+                        : "N/D";
+            }
+
+            modelo.addRow(new Object[]{
+                p.getId_proyecto(),
+                nombreEmpresa,
+                p.getTitulo(),
+                p.getDescripcion(),
+                p.getEspacios(),
+                p.getDisponible()
+            });
+        }
+
+        vista.jTable1.setModel(modelo);
+        vista.lblContador.setText("Proyectos registrados: " + lista.size());
+    }
+
 }

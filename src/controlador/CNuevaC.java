@@ -1,14 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controlador;
 
 import modelo.Gestor;
 import modelo.Codigo; // Para obtener el correo asociado
 import vista.NuevaC;
-// Si tienes una vista de login, impórtala para redirigir al usuario
-// import vistas.Login; 
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,9 +16,34 @@ public class CNuevaC implements ActionListener {
     public CNuevaC(NuevaC vistaNuevaC) {
         this.vistaNuevaC = vistaNuevaC;
         this.modeloGestor = new Gestor();
-        
-        // Asociar el ActionListener al botón de la vista
+
+        // Asociar el ActionListener al botón de aceptar
         this.vistaNuevaC.btnAceptar.addActionListener(this);
+
+        // Mostrar contraseña (ícono de ojo abierto)
+        this.vistaNuevaC.mostrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                vistaNuevaC.txtNueva.setEchoChar((char) 0); // Muestra texto plano
+                vistaNuevaC.mostrar.setVisible(false);
+                vistaNuevaC.ocultar.setVisible(true);
+            }
+        });
+
+        // Ocultar contraseña (ícono de ojo cerrado)
+        this.vistaNuevaC.ocultar.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                vistaNuevaC.txtNueva.setEchoChar('•'); // Oculta contraseña
+                vistaNuevaC.mostrar.setVisible(true);
+                vistaNuevaC.ocultar.setVisible(false);
+            }
+        });
+
+        // Configurar estado inicial
+        this.vistaNuevaC.mostrar.setVisible(true);
+        this.vistaNuevaC.ocultar.setVisible(false);
+        this.vistaNuevaC.txtNueva.setEchoChar('•'); // Asegurar oculto por defecto
     }
 
     public void iniciar() {
@@ -43,19 +62,17 @@ public class CNuevaC implements ActionListener {
                 JOptionPane.showMessageDialog(vistaNuevaC, "Por favor, ingresa tu nueva contraseña.", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            // Aquí puedes agregar validaciones de complejidad de contraseña (longitud, caracteres, etc.)
-            // if (nuevaContrasena.length() < 6) {
-            //    JOptionPane.showMessageDialog(vistaNuevaC, "La contraseña debe tener al menos 6 caracteres.", "Contraseña Débil", JOptionPane.WARNING_MESSAGE);
-            //    return;
-            // }
 
             if (correoAsociado != null && modeloGestor.actualizarContrasena(correoAsociado, nuevaContrasena)) {
                 JOptionPane.showMessageDialog(vistaNuevaC, "Contraseña actualizada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 vistaNuevaC.dispose(); // Cerrar la ventana actual
-                // Opcional: Redirigir al usuario a la pantalla de login
-                // Login vistaLogin = new Login();
-                // CLogin controladorLogin = new CLogin(vistaLogin); // Asumiendo que tienes un controlador de Login
-                // controladorLogin.iniciar(); 
+
+                // Redirigir al login
+                vista.inicioSesion login = new vista.inicioSesion();
+                controlador.CInicioSesion.reiniciarEstado(); // Reiniciar intentos de login
+                controlador.CInicioSesion controladorLogin = new controlador.CInicioSesion(login);
+                login.setVisible(true);
+                login.setLocationRelativeTo(null);
             } else {
                 JOptionPane.showMessageDialog(vistaNuevaC, "Error al actualizar la contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
             }

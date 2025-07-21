@@ -31,9 +31,10 @@ public class NuevaC extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnAceptar = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtNueva = new javax.swing.JPasswordField();
+        mostrar = new javax.swing.JLabel();
+        ocultar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,8 +85,9 @@ public class NuevaC extends javax.swing.JFrame {
         btnAceptar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
         btnAceptar.setText("ACEPTAR ");
+        btnAceptar.setContentAreaFilled(false);
+        btnAceptar.setOpaque(true);
         jPanel1.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 160, 50));
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 200, 50, 50));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -94,6 +96,12 @@ public class NuevaC extends javax.swing.JFrame {
 
         txtNueva.setText("jPasswordField1");
         jPanel1.add(txtNueva, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, 420, 50));
+
+        mostrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/mostrar-contrasena (1).png"))); // NOI18N
+        jPanel1.add(mostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 202, 30, 50));
+
+        ocultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/oculto (1).png"))); // NOI18N
+        jPanel1.add(ocultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 202, 30, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -119,11 +127,12 @@ public class NuevaC extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAceptar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    public javax.swing.JLabel mostrar;
+    public javax.swing.JLabel ocultar;
     public javax.swing.JPasswordField txtNueva;
     // End of variables declaration//GEN-END:variables
 }

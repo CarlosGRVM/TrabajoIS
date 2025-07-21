@@ -27,6 +27,8 @@ public class CEmpresaConsulta {
         this.modelo = new Empresa();
         cargarDatos();
         agregarEventos();
+        vista.btnGuardar.setEnabled(false);
+
     }
 
     private void cargarDatos() {
@@ -35,7 +37,7 @@ public class CEmpresaConsulta {
         DefaultTableModel tableModel = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column != 0; // No editar ID
+                return column != 0; // ID no editable
             }
         };
 
@@ -57,6 +59,7 @@ public class CEmpresaConsulta {
             @Override
             public void tableChanged(TableModelEvent e) {
                 hayCambiosSinGuardar = true;
+                vista.btnGuardar.setEnabled(true); // ✔ habilitar botón
             }
         });
     }
@@ -72,12 +75,16 @@ public class CEmpresaConsulta {
         vista.lblRegresar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                confirmarSalida();
                 controlador.GestorVistas.regresar(vista); // ← método universal para volver
             }
         });
 
         vista.btnFiltro.addActionListener(e -> cambiarCategoria());
         vista.btnOrden.addActionListener(e -> cambiarOrden());
+        vista.btnGuardar.addActionListener(e -> guardarCambios());
+        vista.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
         vista.txtBuscador.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -94,6 +101,7 @@ public class CEmpresaConsulta {
                 filtrarYOrdenar();
             }
         });
+
     }
 
     private void confirmarSalida() {
@@ -139,6 +147,8 @@ public class CEmpresaConsulta {
 
         hayCambiosSinGuardar = false;
         JOptionPane.showMessageDialog(vista, "Cambios guardados correctamente (" + actualizados + " registros).");
+        vista.btnGuardar.setEnabled(false);
+
     }
 
     private void cambiarCategoria() {
